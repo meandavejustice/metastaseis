@@ -32,15 +32,6 @@
         padding: 5px 10px;
         text-transform: capitalize;
         }
-        #messages {
-        position: fixed;
-        bottom: 0;
-        height: 100px;
-        width: 400px;
-        overflow-y: scroll;
-        padding: 10px;
-        border: 1px solid black;
-        }
         .track {
         border: 1px solid #909090;
         border-bottom: 3px solid #909090;
@@ -56,6 +47,22 @@
         }
         .track.active {
         box-shadow: 0px 0px 6px 5px #FFC32B;
+        }
+        .track.collapsed {
+        height: 100px;
+        overflow: hidden;
+        margin-left: 0px;
+        }
+        .track.collapsed .wave {
+        position: absolute;
+        height: 150px;
+        top: -50px;
+        }
+        .track.collapsed .wave-progress {
+        top: -50px;
+        }
+        .track.collapsed .wave-progress canvas {
+        height: 150px;
         }
         #workspace.drag {
         border: 5px dashed #7DF8C7;
