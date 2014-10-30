@@ -1,0 +1,18 @@
+{
+  "name": "split-audio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "audiocontext": "^0.1.0",
+    "audiosource": "^0.1.1",
+    "drag-drop": "^2.0.0",
+    "hyperscript": "^1.4.2",
+    "raf": "^2.0.4"
+  }
+}
