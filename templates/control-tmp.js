@@ -4,7 +4,7 @@ module.exports = function() {
   return h('div.control',
            h('span.de', "deactivate"),
            h('div.volume',
-             h('input', {"type": 'range', "min": '0', "max": '11', "step": "1", "value": "5"})),
+             h('input', {"type": 'range', "min": '0', "max": '1', "step": ".05", "value": ".50"})),
            h('span.mute', "mute"),
            h('div.info',
              h('p', "Title: ",

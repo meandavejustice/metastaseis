@@ -4,7 +4,7 @@ var controlTmp = require('./control-tmp');
 module.exports = function() {
   return h('div.track-space',
            controlTmp(),
-           h('div.track',
+           h('div.track.active',
              h('p',
                "drag file 2 edit"),
              h('div.play-cursor'),
