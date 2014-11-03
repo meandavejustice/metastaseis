@@ -1,0 +1,117 @@
+body {
+    font-family: monospace;
+}
+
+#info {
+    display:none;
+    position: fixed;
+    right: 100px;
+    top: 10px;
+}
+
+#info img {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    top: 0px;
+    right:0;
+}
+
+#workspace {
+    margin-top: 100px;
+}
+
+#workspace > p {
+    text-align: center;
+}
+
+.track-space .control {
+    float: left;
+    padding-top: 50px;
+    padding-left: 5px;
+}
+
+button {
+    background: #D9D9D9;
+    padding: 5px 10px;
+    text-transform: capitalize;
+}
+
+.track {
+    border: 1px solid #909090;
+    border-bottom: 3px solid #909090;
+    border-right: 3px solid #909090;
+    padding: 0;
+    background: rgba(189, 189, 189, 0.74);
+    width: 1200px;
+    margin: 0 auto 20px;
+
+    position: relative;
+    width: 1200px;
+    height: 300px;
+}
+
+.track.active {
+    box-shadow: 0px 0px 6px 5px #FFC32B;
+}
+
+.track.collapsed {
+    height: 100px;
+    overflow: hidden;
+    margin-left: 0px;
+}
+
+.track.collapsed .wave {
+    position: absolute;
+    height: 150px;
+    top: -50px;
+}
+
+.track.collapsed .wave-progress {
+    top: -50px;
+}
+
+.track.collapsed .wave-progress canvas {
+    height: 150px;
+}
+
+#workspace.drag {
+    border: 5px dashed #7DF8C7;
+}
+
+.track p {
+    position: fixed;
+    top: 30%;
+    left: 42%;
+    font-size: 25px;
+    color: #72DDB3;
+}
+
+.play-cursor {
+    width: 1px;
+    border-left: 1px solid #FFA239;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+}
+
+.selection {
+    width: 0px;
+    left: 0px;
+    height: 100%;
+    background: rgba(89, 100, 92, 0.45);
+    position: absolute;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
+    -webkit-filter: hue-rotate(90deg);
+    z-index: 3;
+}
+
+.wave-progress {
+    width: 0;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    z-index: 2;
+    overflow: hidden;
+}

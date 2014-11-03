@@ -16,5 +16,6 @@ module.exports = function() {
                  h('i.dur', "00:00:00")),
                h('p', "Remaining: ",
                  h('i.rem', "00:00:00")))),
-           h('span.collapse', "collapse"));
+           h('span.collapse', "collapse"),
+           h('span.remove', "remove"));
 }

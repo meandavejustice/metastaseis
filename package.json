@@ -1,10 +1,11 @@
 {
-  "name": "split-audio",
+  "name": "metastaseis",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "watchify -o bundle.js -v -d main.js & http-server &"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +14,7 @@
     "audiosource": "^0.1.1",
     "drag-drop": "^2.0.0",
     "hyperscript": "^1.4.2",
-    "raf": "^2.0.4"
+    "raf": "^2.0.4",
+    "webworkify": "^1.0.0"
   }
 }

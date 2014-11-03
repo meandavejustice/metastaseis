@@ -2,104 +2,7 @@
 <html>
     <head>
 
-      <style type="text/css" media="screen">
-        body {font-family: monospace;}
-        #info {display:none;
-        position: fixed;
-        right: 100px;
-        top: 10px;
-        }
-        #info img {
-        width: 60px;
-        height: 60px;
-        position: absolute;
-        top: 0px;
-        right:0;
-        }
-        #workspace {
-        margin-top: 100px;
-        }
-        #workspace > p {
-        text-align: center;
-        }
-        .track-space .control {
-        float: left;
-        padding-top: 50px;
-        padding-left: 5px;
-        }
-        button {
-        background: #D9D9D9;
-        padding: 5px 10px;
-        text-transform: capitalize;
-        }
-        .track {
-        border: 1px solid #909090;
-        border-bottom: 3px solid #909090;
-        border-right: 3px solid #909090;
-        padding: 0;
-        background: rgba(189, 189, 189, 0.74);
-        width: 1200px;
-        margin: 0 auto 20px;
-
-        position: relative;
-        width: 1200px;
-        height: 300px;
-        }
-        .track.active {
-        box-shadow: 0px 0px 6px 5px #FFC32B;
-        }
-        .track.collapsed {
-        height: 100px;
-        overflow: hidden;
-        margin-left: 0px;
-        }
-        .track.collapsed .wave {
-        position: absolute;
-        height: 150px;
-        top: -50px;
-        }
-        .track.collapsed .wave-progress {
-        top: -50px;
-        }
-        .track.collapsed .wave-progress canvas {
-        height: 150px;
-        }
-        #workspace.drag {
-        border: 5px dashed #7DF8C7;
-        }
-        .track p {
-        position: fixed;
-        top: 30%;
-        left: 42%;
-        font-size: 25px;
-        color: #72DDB3;
-        }
-        .play-cursor {
-        width: 1px;
-        border-left: 1px solid #FFA239;
-        height: 100%;
-        position: absolute;
-        left: 0px;
-        }
-        .selection {
-        width: 0px;
-        left: 0px;
-        height: 100%;
-        background: rgba(187, 104, 214, 0.61);
-        position: absolute;
-        border-left: 1px solid #fff;
-        border-right: 1px solid #fff;
-        -webkit-filter: hue-rotate(90deg);
-        }
-        .wave-progress {
-        width: 0;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        z-index: 2;
-        overflow: hidden;
-        }
-      </style>
+      <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
     </head>
     <body>
       <input type="file" id="upload"></input>
@@ -107,51 +10,23 @@
       <button id="stop">stop</button>
       <button id="pause">pause</button>
       <button id="cut">cut</button>
-      <button id="skip">skip</button>
-      <button id="back">back</button>
-      <button disabled id="copy">copy</button>
-      <button disabled id="paste">paste</button>
-      <button disabled id="append">append</button>
-      <button disabled id="prepend">prepend</button>
+      <button disabled id="skip">skip</button>
+      <button disabled id="back">back</button>
+      <button id="copy">copy</button>
+      <button id="paste">paste</button>
+      <button id="append">append</button>
+      <button id="prepend">prepend</button>
       <button disabled id="duplicate">duplicate</button>
-      <button disabled id="reverse">reverse</button>
+      <button id="reverse">reverse</button>
       <button disabled id="remove">remove</button>
       <button disabled id="export">export</button>
       <button disabled id="effects">apply effects</button>
 
       <div id="workspace" class="dragdealer">
         <p>drag file 2 edit</p>
-        <!-- <div class="track-space"> -->
-        <!--   <div class="control"> -->
-        <!--     <span class="de">deactivate</span> -->
-        <!--     <div class="volume"> -->
-        <!--       <input type="range" -->
-        <!--              min="0" max="11" step="1" value="5" /> -->
-        <!--     </div> -->
-        <!--     <span class="mute">mute</span> -->
-        <!--     <div class="info"> -->
-        <!--       <p>Title: <i class="title">Track 1</i></p> -->
-        <!--       <article id="time"> -->
-        <!--         <p>Current Time: <i class="cur">00:00:00</i></p> -->
-        <!--         <p>Duration: <i class="dur">00:00:00</i></p> -->
-        <!--         <p>Remaining: <i class="rem">00:00:00</i></p> -->
-        <!--       </article>         -->
-        <!--     </div> -->
-        <!--     <span>collapse</span> -->
-        <!--   </div> -->
-          
-        <!--   <div class="track"> -->
-        <!--     <p>drag file 2 edit</p> -->
-        <!--     <div class="play-cursor"></div> -->
-        <!--     <canvas class="wave" width="1200" height="300"></canvas> -->
-        <!--     <div class="wave-progress"><canvas width="1200" height="300"></canvas> -->
-        <!--     </div> -->
-        <!--   </div> -->
-        <!-- </div> -->
       </div>
 
-
-      <script type="text/javascript" src="id3-min.js"></script>
+      <!-- <script type="text/javascript" src="id3-min.js"></script> -->
       <script type="text/javascript" src="bundle.js"></script>
     </body>
 </html>
