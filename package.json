@@ -15,6 +15,8 @@
     "drag-drop": "^2.0.0",
     "hyperscript": "^1.4.2",
     "raf": "^2.0.4",
+    "routes-router": "^4.1.1",
+    "st": "^0.5.2",
     "webworkify": "^1.0.0"
   }
 }
