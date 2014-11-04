@@ -3,6 +3,7 @@ var dragDrop = require('drag-drop');
 var AudioContext = require('audiocontext');
 var AudioSource = require('audiosource');
 
+var colors = require('./lib/colors');
 var editor = require('./lib/edits');
 var Track = require('./lib/track');
 
@@ -31,8 +32,16 @@ var reverseBtn = document.querySelector('#reverse');
 var removeBtn = document.querySelector('#remove');
 var tracks = {};
 
+var vips = welcome.querySelectorAll('span');
+
+for(var i=0; i<vips.length; i++){
+  colors.start(vips[i], 300);
+}
+
 dragDrop('body', function (files) {
-  if (welcome) welcome.remove();
+  if (welcome) {
+    welcome.remove();
+  }
   newTrackFromFile(files[0]);
 });
 
