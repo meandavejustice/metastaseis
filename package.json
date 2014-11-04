@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "watchify -o bundle.js -v -d main.js & http-server &"
+    "start": "watchify -o public/bundle.js -v -d public/main.js & node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -13,7 +13,9 @@
     "audiocontext": "^0.1.0",
     "audiosource": "^0.1.1",
     "drag-drop": "^2.0.0",
+    "formidable": "^1.0.15",
     "hyperscript": "^1.4.2",
+    "nodemailer": "^1.3.0",
     "raf": "^2.0.4",
     "routes-router": "^4.1.1",
     "st": "^0.5.2",

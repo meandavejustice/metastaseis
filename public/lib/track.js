@@ -1,16 +1,19 @@
+var EE = require('events').EventEmitter;
 var raf = require('raf');
 var AudioSource = require('audiosource');
 var formatTime = require('./format-time');
 var drawBuffer = require('./draw-buffer');
-
+var colors = require('./colors');
 module.exports = Track;
 
-function Track(opts, emitter) {
+function Track(opts) {
+  this.emitter = new EE();
   this.containEl = opts.containEl;
   this.trackEl = this.containEl.querySelector('.track');
   this.active = true;
   this.context = opts.context;
   this.audiosource = opts.audiosource;
+  this.id = opts.id;
 
   this.clipboard = {
     start: 0,
@@ -28,7 +31,8 @@ function Track(opts, emitter) {
   this.initialPlay = true;
   this.initStartTime = 0;
 
-  // time indicators
+  // indicators
+  this.fileIndicator = this.containEl.querySelector('.track p');
   this.currentTimeEl = this.containEl.querySelector('.cur');
   this.remainingEl = this.containEl.querySelector('.rem');
   this.durationEl = this.containEl.querySelector('.dur');
@@ -43,10 +47,7 @@ function Track(opts, emitter) {
   this.selection = this.containEl.querySelector('.selection');
   this.selectable = [].slice.call(document.querySelectorAll('.selectable'));
 
-  this.containEl.querySelector('.remove').addEventListener('click', function(ev) {
-    emitter.emit('tracks:remove', {id: this.id});
-    ev.target.parentElement.parentNode.remove();
-  }.bind(this));
+  colors.start(this.fileIndicator, 300);
 
   this.gainEl.addEventListener('change', function(ev) {
     this.gainNode.gain.value = parseFloat(ev.target.value);
@@ -153,19 +154,31 @@ function Track(opts, emitter) {
     }
   }.bind(this));
 
-  emitter.on('tracks:play', function(ev) {
+  function playListen (ev) {
     if (this.active) this.play();
-  }.bind(this));
+  }
 
-  emitter.on('tracks:pause', function(ev) {
+  this.emitter.on('tracks:play', playListen.bind(this));
+
+  function pauseListen(ev) {
     if (this.active) this.pause();
-  }.bind(this));
+  }
 
-  emitter.on('tracks:stop', function(ev) {
+  this.emitter.on('tracks:pause', pauseListen.bind(this));
+
+  function stopListen(ev) {
     if (this.active) {
       this.stop();
       this.resetProgress();
     }
+  }
+
+  this.emitter.on('tracks:stop', stopListen.bind(this));
+
+  this.containEl.querySelector('.remove').addEventListener('click', function(ev) {
+    ev.target.parentElement.parentNode.remove();
+    this.emitter.emit('tracks:remove', {id: this.id});
+    this.emitter = null;
   }.bind(this));
 }
 
@@ -175,6 +188,9 @@ Track.prototype = {
     this.lastPlay = this.context.currentTime;
     this.updateStartOffset();
     this.playTrack(this.startOffset % this.audiosource.buffer.duration);
+  },
+  remove: function() {
+
   },
   percentFromClick: function(ev) {
     var x = ev.offsetX || ev.layerX;
@@ -273,17 +289,17 @@ Track.prototype = {
     this.drawWaves();
   },
   loadFile: function (file) {
-    // emitter.emit('audio:status', {msg: 'loading file...'});
-    // emitter.emit('audio:file', {file: file});
+    this.fileIndicator.textContent = 'loading file...';
 
     var self = this;
     // set status and id3
     var reader = new FileReader();
     reader.onloadend = function(ev) {
-      // emitter.emit('audio:status', {msg: 'decoding audio data...'});
+      self.fileIndicator.textContent = 'decoding audio data...';
 
       self.context.decodeAudioData(ev.target.result, function(buf) {
-        // emitter.emit('audio:status', {msg: 'rendering wave...'});
+        self.fileIndicator.textContent = 'rendering wave...';
+
         self.gainNode = self.context.createGain();
         self.audiosource = new AudioSource(self.context, {
           gainNode: self.gainNode
@@ -298,6 +314,7 @@ Track.prototype = {
         self.progressWave.querySelector('canvas').width = w;
         drawBuffer(self.wave, buf, '#52F6A4');
         drawBuffer(self.progressWave.querySelector('canvas'), buf, '#F445F0');
+        self.fileIndicator.remove();
       });
     };
 

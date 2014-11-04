@@ -16,6 +16,7 @@ var uniqId = function() {return Math.random().toString(16).slice(2)};
 var workspaceEl = document.querySelector('#workspace');
 
 // controls
+var welcome = document.querySelector('.welcome');
 var uploadBtn = document.querySelector('#upload');
 var playBtn = document.querySelector('#play');
 var pauseBtn = document.querySelector('#pause');
@@ -28,21 +29,10 @@ var appendBtn = document.querySelector('#append');
 var duplicateBtn = document.querySelector('#duplicate');
 var reverseBtn = document.querySelector('#reverse');
 var removeBtn = document.querySelector('#remove');
-var tracks = [];
-
-emitter.on('tracks:remove', function(ev) {
-  tracks.forEach(function(track, idx) {
-    if (track.id === ev.id) {
-      track.stop();
-      track.audiosource.disconnect();
-      delete track.gainNode;
-      delete track.audiosource;
-      tracks.splice(idx, 1);
-    }
-  });
-});
+var tracks = {};
 
 dragDrop('body', function (files) {
+  if (welcome) welcome.remove();
   newTrackFromFile(files[0]);
 });
 
@@ -51,15 +41,21 @@ uploadBtn.addEventListener('change', function(ev) {
 });
 
 playBtn.addEventListener('click', function() {
-  emitter.emit('tracks:play', {});
+  Object.keys(tracks).forEach(function(key) {
+    tracks[key].emitter.emit('tracks:play', {});
+  });
 });
 
 pauseBtn.addEventListener('click', function() {
-  emitter.emit('tracks:pause', {});
+  Object.keys(tracks).forEach(function(key) {
+    tracks[key].emitter.emit('tracks:pause', {});
+  });
 });
 
 stopBtn.addEventListener('click', function() {
-  emitter.emit('tracks:stop', {});
+  Object.keys(tracks).forEach(function(key) {
+    tracks[key].emitter.emit('tracks:stop', {});
+  });
 });
 
 copyBtn.addEventListener('click', function() {
@@ -178,30 +174,38 @@ function getActiveTrack() {
 
 function newTrackFromAudioBuffer(audioBuffer) {
   var containerEl = trackTmp();
-
+  var id = uniqId();
   workspaceEl.appendChild(containerEl);
-  tracks.push(new Track({
-    id: uniqId(),
+  tracks[id] = new Track({
+    id: id,
     containEl: containerEl,
     context: audioContext,
     gainNode: audioContext.createGain()
-  }, emitter));
-  tracks[tracks.length - 1].audiosource = new AudioSource(audioContext, {
+  });
+
+  tracks[id].audiosource = new AudioSource(audioContext, {
     gainNode: tracks[tracks.length - 1].gainNode
   });
-  tracks[tracks.length - 1].audiosource.buffer = audioBuffer;
-  tracks[tracks.length - 1].drawWaves();
-  debugger;
+
+  tracks[id].audiosource.buffer = audioBuffer;
+  tracks[id].drawWaves();
 }
 
 function newTrackFromFile(file) {
+  if (welcome) welcome.remove();
   var containerEl = trackTmp();
+  var id = uniqId();
 
   workspaceEl.appendChild(containerEl);
-  tracks.push(new Track({
-    id: uniqId(),
+  tracks[id] = new Track({
+    id: id,
     containEl: containerEl,
     context: audioContext
-  }, emitter));
-  tracks[tracks.length - 1].loadFile(file);
+  });
+  tracks[id].emitter.on('tracks:remove', function(ev) {
+    tracks[ev.id] = null;
+    delete tracks[ev.id];
+    this.removeAllListeners();
+  });
+  tracks[id].loadFile(file);
 }

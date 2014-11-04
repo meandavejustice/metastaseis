@@ -78,7 +78,7 @@ button {
 }
 
 .track p {
-    position: fixed;
+    position: absolute;
     top: 30%;
     left: 42%;
     font-size: 25px;
@@ -122,3 +122,18 @@ button {
 /* .wave-progress canvas { */
 /*     min-width: 100%; */
 /* } */
+
+
+
+/* welcome */
+.welcome {
+    width: 600px;
+    margin: 0 auto;
+}
+.welcome h3 {
+    text-align: center;
+}
+.welcome a {
+    color: #F623F6;
+    text-decoration: none;
+}
