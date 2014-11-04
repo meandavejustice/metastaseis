@@ -37,7 +37,7 @@ function Track(opts, emitter) {
   this.gainEl = this.containEl.querySelector('.volume input');
 
   // wave elements
-  this.wave = this.containEl.querySelector('.wave');
+  this.wave = this.containEl.querySelector('.wave canvas');
   this.progressWave = this.containEl.querySelector('.wave-progress');
   this.cursor = this.containEl.querySelector('.play-cursor');
   this.selection = this.containEl.querySelector('.selection');
@@ -178,7 +178,7 @@ Track.prototype = {
   },
   percentFromClick: function(ev) {
     var x = ev.offsetX || ev.layerX;
-    return (x / this.wave.width) * 100;
+    return (x / this.wave.offsetWidth) * 100;
   },
   getPercentFromCursor: function() {
     return parseFloat(this.cursor.style.left.replace('%', ''));
@@ -293,6 +293,9 @@ Track.prototype = {
 
         self.audiosource.buffer = buf;
 
+        var w = self.wave.parentNode.offsetWidth;
+        self.wave.width = w;
+        self.progressWave.querySelector('canvas').width = w;
         drawBuffer(self.wave, buf, '#52F6A4');
         drawBuffer(self.progressWave.querySelector('canvas'), buf, '#F445F0');
       });

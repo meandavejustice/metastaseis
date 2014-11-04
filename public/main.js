@@ -6,7 +6,7 @@ var AudioSource = require('audiosource');
 var editor = require('./lib/edits');
 var Track = require('./lib/track');
 
-var trackTmp = require('./templates/track-tmp');
+var trackTmp = require('../templates/track-tmp');
 
 var emitter = new EE();
 var audioContext = new AudioContext();

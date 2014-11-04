@@ -9,7 +9,8 @@ module.exports = function() {
                "drag file 2 edit"),
              h('div.play-cursor'),
              h('div.selection'),
-             h('canvas.wave.selectable', { 'width': '1200', 'height': '300'}),
+             h('div.wave.selectable',
+               h('canvas', {'height': '300'})),
              h('div.wave-progress.selectable',
-               h('canvas', {'width': '1200', 'height': '300'}))));
+               h('canvas', {'height': '300'}))));
 }
