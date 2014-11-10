@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "watchify -o public/bundle.js -v -d public/main.js & node server.js"
+    "start": "watchify -o public/bundle.js -v -d public/main.js & nodemon server.js"
   },
   "author": "",
   "license": "ISC",

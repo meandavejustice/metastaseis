@@ -11,13 +11,15 @@ function Track(opts) {
   this.containEl = opts.containEl;
   this.trackEl = this.containEl.querySelector('.track');
   this.active = true;
+  this.selecting = true;
   this.context = opts.context;
   this.audiosource = opts.audiosource;
   this.id = opts.id;
 
   this.clipboard = {
     start: 0,
-    end: 0
+    end: 0,
+    at: 0
   };
 
   this.currentTime = this.context.currentTime;
@@ -83,16 +85,20 @@ function Track(opts) {
       if (this.playing) return;
       if (!this.moving) {
         var leftPercent = this.percentFromClick(ev) + '%';
-        this.selection.style.left = leftPercent;
-        this.selection.style.width = 0;
-        this.cursor.style.left = leftPercent;
-      }
 
-      this.moving = true;
+        if (this.selecting) {
+          this.selection.style.left = leftPercent;
+          this.selection.style.width = 0;
+          this.moving = true;
+        }
+
+        this.cursor.style.left = leftPercent;
+        this.clipboard.at = this.getOffsetFromPercent(leftPercent.replace('%', ''));
+      }
     }.bind(this));
 
     wave.addEventListener('mousemove', function(ev) {
-      if (!this.moving) return;
+      if (!this.moving || !this.selecting) return;
       var leftPercent = this.getPercentFromCursor();
       var rightPercent = this.percentFromClick(ev);
       var diff = rightPercent - leftPercent;
@@ -121,6 +127,7 @@ function Track(opts) {
   // }.bind(this));
 
   this.selection.addEventListener('mouseup', function(ev) {
+    if (!this.selecting) return;
     var leftPercent = this.getPercentFromCursor();
     var rightPercent = this.percentFromClick(ev);
     this.clipboard.start = this.getOffsetFromPercent(leftPercent);
@@ -140,6 +147,17 @@ function Track(opts) {
       this.gainNode.gain.value = this.lastGainValue;
       this.gainEl.value = this.lastGainValue;
       el.textContent = 'mute';
+    }
+  }.bind(this));
+
+  this.containEl.querySelector('.selecting').addEventListener('click', function(ev) {
+    var el = ev.target;
+    if (el.textContent === 'selecting') {
+      el.textContent = 'notselecting';
+      this.selecting = false;
+    } else {
+      el.textContent = 'selecting';
+      this.selecting = true;
     }
   }.bind(this));
 

@@ -6,6 +6,7 @@ module.exports = function() {
            h('div.volume',
              h('input', {"type": 'range', "min": '0', "max": '1', "step": ".05", "value": ".50"})),
            h('span.mute', "mute"),
+           h('span.selecting', "selecting"),
            h('div.info',
              h('p', "Title: ",
                h('i.title', {'contentEditable': true}, "Track 1")),

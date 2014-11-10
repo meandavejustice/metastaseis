@@ -67,6 +67,28 @@ stopBtn.addEventListener('click', function() {
   });
 });
 
+function showPasteCursors() {
+  var selections = document.querySelectorAll('.selection');
+  for (var i=0; i < selections; i++) {
+    selections[i].style.display = 'none';
+  }
+  var pasteCursors = document.querySelectorAll('.paste-cursor');
+  for (var i=0; i < pasteCursors; i++) {
+    pasteCursors[i].style.display = 'block';
+  }
+}
+
+function hidePasteCursors() {
+  var selections = document.querySelectorAll('.selection');
+  for (var i=0; i < selections; i++) {
+    selections[i].style.display = 'block';
+  }
+  var pasteCursors = document.querySelectorAll('.paste-cursor');
+  for (var i=0; i < pasteCursors; i++) {
+    pasteCursors[i].style.display = 'none';
+  }
+}
+
 copyBtn.addEventListener('click', function() {
   var activeTrack = getActiveTrack();
   if (!activeTrack) return;
@@ -74,6 +96,8 @@ copyBtn.addEventListener('click', function() {
   var onComplete = function() {
     console.log('copy buffer complete: ', activeTrack.clipboard.buffer);
   };
+
+  showPasteCursors();
   editor.copy(audioContext, activeTrack.clipboard, activeTrack.audiosource.buffer, onComplete);
 });
 
@@ -89,6 +113,7 @@ cutBtn.addEventListener('click', function() {
   activeTrack.clipboard.start = activeTrack.clipboard.start + activeTrack.lastPlay;
   activeTrack.clipboard.end = activeTrack.clipboard.end + activeTrack.lastPlay;
 
+  showPasteCursors();
   editor.cut(audioContext, activeTrack.clipboard, activeTrack.audiosource.buffer, onComplete);
 });
 
@@ -102,7 +127,8 @@ pasteBtn.addEventListener('click', function() {
   };
 
   alert('select a place to paste');
-  editor.paste(audioContext, activeTrack.clipboard, activeTrack.audiosource.buffer, 0.5, onComplete);
+  editor.paste(audioContext, activeTrack.clipboard, activeTrack.audiosource.buffer, activeTrack.clipboard.at, onComplete);
+  hidePasteCursors();
 });
 
 prependBtn.addEventListener('click', function() {
@@ -168,9 +194,10 @@ reverseBtn.addEventListener('click', function() {
 // });
 
 function getActiveTrack() {
-  var activeTracks = tracks.filter(function(track) {
-                       return track.active;
-                     });
+  var activeTracks = [];
+  Object.keys(tracks).forEach(function(key) {
+    if (tracks[key].active) activeTracks.push(tracks[key]);
+  });
 
   if (activeTracks.length > 1) {
     alert('You cannot have more than one activated track for this option');

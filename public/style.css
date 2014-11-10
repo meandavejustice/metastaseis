@@ -93,6 +93,15 @@ button {
     left: 0px;
 }
 
+.paste-cursor {
+    width: 1px;
+    border-left: 1px solid #2CE5F5;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    display: none;
+}
+
 .selection {
     width: 0px;
     left: 0px;
