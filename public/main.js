@@ -215,7 +215,9 @@ function getActiveTrack() {
 }
 
 function newTrackFromAudioBuffer(audioBuffer) {
-  var containerEl = trackTmp();
+  var containerEl = trackTmp({
+    title: "Track 1"
+  });
   var id = uniqId();
   workspaceEl.appendChild(containerEl);
   tracks[id] = new Track({
@@ -243,11 +245,14 @@ function newTrackFromFile(file) {
     return;
   }
   if (welcome) welcome.remove();
-  var containerEl = trackTmp();
+  var containerEl = trackTmp({
+    title: file.name
+  });
   var id = uniqId();
 
   workspaceEl.appendChild(containerEl);
   tracks[id] = new Track({
+    title: file.name,
     id: id,
     containEl: containerEl,
     context: audioContext

@@ -15,6 +15,7 @@ function Track(opts) {
   this.context = opts.context;
   this.audiosource = opts.audiosource;
   this.id = opts.id;
+  this.title = opts.title;
 
   if (opts.gainNode) {
     this.gainNode = opts.gainNode;
@@ -334,9 +335,6 @@ Track.prototype = {
 
         self.audiosource.buffer = buf;
 
-        // var w = self.wave.parentNode.offsetWidth;
-        // self.wave.width = w;
-        // self.progressWave.querySelector('canvas').width = w;
         self.adjustWave();
         drawBuffer(self.wave, buf, '#52F6A4');
         drawBuffer(self.progressWave.querySelector('canvas'), buf, '#F445F0');

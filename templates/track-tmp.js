@@ -1,9 +1,9 @@
 var h = require('hyperscript');
 var controlTmp = require('./control-tmp');
 
-module.exports = function() {
+module.exports = function(data) {
   return h('div.track-space',
-           controlTmp(),
+           controlTmp(data),
            h('div.track.active',
              h('p',
                "drag file 2 edit"),

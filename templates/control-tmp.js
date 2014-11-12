@@ -1,6 +1,6 @@
 var h = require('hyperscript');
 
-module.exports = function() {
+module.exports = function(data) {
   return h('div.control',
            h('span.de', "deactivate"),
            h('div.volume',
@@ -10,7 +10,7 @@ module.exports = function() {
            h('span.selecting', "hide selection"),
            h('div.info',
              h('p', "Title: ",
-               h('i.title', {'contentEditable': true}, "Track 1")),
+               h('i.title', {'contentEditable': true}, data.title)),
              h('article.info',
                h('p', "Current Time: ",
                  h('i.cur', "00:00:00")),
