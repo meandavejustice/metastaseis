@@ -314,6 +314,38 @@ Track.prototype = {
     });
     this.drawWaves();
   },
+  loadURL: function (url) {
+    this.fileIndicator.textContent = 'loading file from url...';
+
+    var req = new XMLHttpRequest();
+    req.open('GET', url, true);
+        req.responseType = 'arraybuffer';
+    var self = this;
+    req.onloadend = function(ev) {
+           self.fileIndicator.textContent = 'decoding audio data...';
+
+           debugger;
+           self.context.decodeAudioData(req.response, function(buf) {
+           self.fileIndicator.textContent = 'rendering wave...';
+
+           self.gainNode = self.context.createGain();
+           self.audiosource = new AudioSource(self.context, {
+             gainNode: self.gainNode
+           });
+
+           self.durationEl.textContent = formatTime(buf.duration);
+
+           self.audiosource.buffer = buf;
+
+           self.adjustWave();
+           drawBuffer(self.wave, buf, '#52F6A4');
+           drawBuffer(self.progressWave.querySelector('canvas'), buf, '#F445F0');
+           self.fileIndicator.remove();
+         });
+    };
+
+    req.send();
+  },
   loadFile: function (file) {
     this.fileIndicator.textContent = 'loading file...';
 

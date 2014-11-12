@@ -14,9 +14,11 @@
     "audiosource": "^0.1.1",
     "drag-drop": "^2.0.0",
     "formidable": "^1.0.15",
+    "gum": "0.0.1",
     "hyperscript": "^1.4.2",
     "nodemailer": "^1.3.0",
     "raf": "^2.0.4",
+    "recorder.js": "^1.2.2",
     "routes-router": "^4.1.1",
     "st": "^0.5.2",
     "webworkify": "^1.0.0"

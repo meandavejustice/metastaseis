@@ -5,6 +5,7 @@ var AudioSource = require('audiosource');
 
 var colors = require('./lib/colors');
 var editor = require('./lib/edits');
+var recorder = require('./lib/record');
 var Track = require('./lib/track');
 
 var trackTmp = require('../templates/track-tmp');
@@ -30,6 +31,7 @@ var appendBtn = document.querySelector('#append');
 var duplicateBtn = document.querySelector('#duplicate');
 var reverseBtn = document.querySelector('#reverse');
 var removeBtn = document.querySelector('#remove');
+var recordBtn = document.querySelector('#record');
 var tracks = {};
 
 var vips = welcome.querySelectorAll('span');
@@ -37,6 +39,20 @@ var vips = welcome.querySelectorAll('span');
 for(var i=0; i<vips.length; i++){
   colors.start(vips[i], 300);
 }
+
+var recording = false;
+
+recordBtn.addEventListener('click', function() {
+  if (!recording) {
+    recorder.start(audioContext);
+    recording = true;
+  } else {
+    recorder.stop(function(blob) {
+               newTrackFromURL(URL.createObjectURL(blob));
+             });
+    recording = false;
+  }
+})
 
 dragDrop('body', function (files) {
   if (welcome) {
@@ -232,6 +248,7 @@ function newTrackFromAudioBuffer(audioBuffer) {
   });
 
   tracks[id].audiosource.buffer = audioBuffer;
+
   tracks[id].adjustWave();
   tracks[id].drawWaves();
   tracks[id].fileIndicator.remove();
@@ -263,5 +280,28 @@ function newTrackFromFile(file) {
     this.removeAllListeners();
   });
   tracks[id].loadFile(file);
+  enablePlaybackOpts();
+}
+
+function newTrackFromURL(url) {
+  if (welcome) welcome.remove();
+  var containerEl = trackTmp({
+    title: "Recording 1"
+  });
+  var id = uniqId();
+
+  workspaceEl.appendChild(containerEl);
+  tracks[id] = new Track({
+    title: "Recording 1",
+    id: id,
+    containEl: containerEl,
+    context: audioContext
+  });
+  tracks[id].emitter.on('tracks:remove', function(ev) {
+    tracks[ev.id] = null;
+    delete tracks[ev.id];
+    this.removeAllListeners();
+  });
+  tracks[id].loadURL(url);
   enablePlaybackOpts();
 }
