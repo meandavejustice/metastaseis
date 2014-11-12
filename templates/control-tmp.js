@@ -6,7 +6,8 @@ module.exports = function() {
            h('div.volume',
              h('input', {"type": 'range', "min": '0', "max": '1', "step": ".05", "value": ".50"})),
            h('span.mute', "mute"),
-           h('span.selecting', "selecting"),
+           h('br'),
+           h('span.selecting', "hide selection"),
            h('div.info',
              h('p', "Title: ",
                h('i.title', {'contentEditable': true}, "Track 1")),
@@ -18,5 +19,6 @@ module.exports = function() {
                h('p', "Remaining: ",
                  h('i.rem', "00:00:00")))),
            h('span.collapse', "collapse"),
+           h('br'),
            h('span.remove', "remove"));
 }

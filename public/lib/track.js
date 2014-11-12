@@ -16,6 +16,10 @@ function Track(opts) {
   this.audiosource = opts.audiosource;
   this.id = opts.id;
 
+  if (opts.gainNode) {
+    this.gainNode = opts.gainNode;
+  }
+
   this.clipboard = {
     start: 0,
     end: 0,
@@ -152,12 +156,14 @@ function Track(opts) {
 
   this.containEl.querySelector('.selecting').addEventListener('click', function(ev) {
     var el = ev.target;
-    if (el.textContent === 'selecting') {
-      el.textContent = 'notselecting';
+    if (el.textContent === 'hide selection') {
+      el.textContent = 'show selection';
       this.selecting = false;
+      this.selection.style.display = 'none';
     } else {
-      el.textContent = 'selecting';
+      el.textContent = 'hide selection';
       this.selecting = true;
+      this.selection.style.display = 'block';
     }
   }.bind(this));
 
@@ -194,6 +200,7 @@ function Track(opts) {
   this.emitter.on('tracks:stop', stopListen.bind(this));
 
   this.containEl.querySelector('.remove').addEventListener('click', function(ev) {
+    this.stop();
     ev.target.parentElement.parentNode.remove();
     this.emitter.emit('tracks:remove', {id: this.id});
     this.emitter = null;
@@ -327,9 +334,10 @@ Track.prototype = {
 
         self.audiosource.buffer = buf;
 
-        var w = self.wave.parentNode.offsetWidth;
-        self.wave.width = w;
-        self.progressWave.querySelector('canvas').width = w;
+        // var w = self.wave.parentNode.offsetWidth;
+        // self.wave.width = w;
+        // self.progressWave.querySelector('canvas').width = w;
+        self.adjustWave();
         drawBuffer(self.wave, buf, '#52F6A4');
         drawBuffer(self.progressWave.querySelector('canvas'), buf, '#F445F0');
         self.fileIndicator.remove();
@@ -337,6 +345,11 @@ Track.prototype = {
     };
 
     reader.readAsArrayBuffer(file);
+  },
+  adjustWave: function() {
+    var w = this.wave.parentNode.offsetWidth;
+    this.wave.width = w;
+    this.progressWave.querySelector('canvas').width = w;
   },
   drawWaves: function() {
     var prevLeft = 0;

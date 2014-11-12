@@ -89,6 +89,22 @@ function hidePasteCursors() {
   }
 }
 
+function enablePlaybackOpts() {
+  playBtn.disabled = false;
+  copyBtn.disabled = false;
+  cutBtn.disabled = false;
+  stopBtn.disabled = false;
+  pauseBtn.disabled = false;
+  reverseBtn.disabled = false;
+}
+
+function enableClipboardOpts() {
+  prependBtn.disabled = false;
+  appendBtn.disabled = false;
+  pasteBtn.disabled = false;
+  duplicateBtn.disabled = false;
+}
+
 copyBtn.addEventListener('click', function() {
   var activeTrack = getActiveTrack();
   if (!activeTrack) return;
@@ -98,6 +114,7 @@ copyBtn.addEventListener('click', function() {
   };
 
   showPasteCursors();
+  enableClipboardOpts();
   editor.copy(audioContext, activeTrack.clipboard, activeTrack.audiosource.buffer, onComplete);
 });
 
@@ -114,6 +131,7 @@ cutBtn.addEventListener('click', function() {
   activeTrack.clipboard.end = activeTrack.clipboard.end + activeTrack.lastPlay;
 
   showPasteCursors();
+  enableClipboardOpts();
   editor.cut(audioContext, activeTrack.clipboard, activeTrack.audiosource.buffer, onComplete);
 });
 
@@ -126,7 +144,6 @@ pasteBtn.addEventListener('click', function() {
     activeTrack.drawWaves();
   };
 
-  alert('select a place to paste');
   editor.paste(audioContext, activeTrack.clipboard, activeTrack.audiosource.buffer, activeTrack.clipboard.at, onComplete);
   hidePasteCursors();
 });
@@ -163,35 +180,24 @@ reverseBtn.addEventListener('click', function() {
   editor.reverse(activeTrack.audiosource.buffer, onComplete);
 });
 
-// removeBtn.addEventListener('click', function() {
-//   if(!confirm('Remove '+ workspaceEl.querySelectorAll('.active').length + ' tracks?')) return;
-//   tracks.forEach(function(track, idx) {
-//     if (track.active) {
-//       track.stop();
-//       track.audiosource.disconnect();
-//       delete track.gainNode;
-//       delete track.audiosource;
-//       track.containEl.remove();
-//       tracks.splice(idx, 1);
-//     }
-//   });
-// })
+duplicateBtn.addEventListener('click', function() {
+  var activeTrack = getActiveTrack();
+  if (!activeTrack) return;
 
-// duplicateBtn.addEventListener('click', function() {
-//   var activeTrack = getActiveTrack();
-//   if (!activeTrack) return;
+  var onComplete = function() {
+    console.log('duplicating buffer: ', activeTrack.clipboard.buffer);
+    newTrackFromAudioBuffer(activeTrack.clipboard.buffer);
+  };
 
-//   var onComplete = function() {
-//     console.log('copy buffer complete: ', activeTrack.clipboard.buffer);
-//     newTrackFromAudioBuffer(activeTrack.clipboard.buffer);
-//   };
-
-//   if (activeTrack.clipboard.start === 0 && activeTrack.clipboard.end === 0) {
-//     activeTrack.clipboard.end = activeTrack.audiosource.buffer.duration;
-//   }
-
-//   editor.copy(audioContext, activeTrack.clipboard, activeTrack.audiosource.buffer, onComplete);
-// });
+  if (activeTrack.clipboard.buffer) {
+    onComplete();
+  } else if (activeTrack.clipboard.start === 0 && activeTrack.clipboard.end === 0) {
+    activeTrack.clipboard.end = activeTrack.audiosource.buffer.duration;
+    editor.copy(audioContext, activeTrack.clipboard, activeTrack.audiosource.buffer, onComplete);
+  } else {
+    editor.copy(audioContext, activeTrack.clipboard, activeTrack.audiosource.buffer, onComplete);
+  }
+});
 
 function getActiveTrack() {
   var activeTracks = [];
@@ -220,14 +226,22 @@ function newTrackFromAudioBuffer(audioBuffer) {
   });
 
   tracks[id].audiosource = new AudioSource(audioContext, {
-    gainNode: tracks[tracks.length - 1].gainNode
+    gainNode: tracks[id].gainNode
   });
 
   tracks[id].audiosource.buffer = audioBuffer;
+  tracks[id].adjustWave();
   tracks[id].drawWaves();
+  tracks[id].fileIndicator.remove();
 }
 
 function newTrackFromFile(file) {
+  if (file === undefined) return;
+  if (!~file.type.indexOf('audio')) {
+    alert('audio files only please.');
+    // alert(file.type + ' files are not supported.');
+    return;
+  }
   if (welcome) welcome.remove();
   var containerEl = trackTmp();
   var id = uniqId();
@@ -244,4 +258,5 @@ function newTrackFromFile(file) {
     this.removeAllListeners();
   });
   tracks[id].loadFile(file);
+  enablePlaybackOpts();
 }
