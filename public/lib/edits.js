@@ -22,9 +22,9 @@ function copyBuffer(context, clipboard, buffer, cb) {
   clipboard.buffer = context.createBuffer(2, end - start, buffer.sampleRate);
 
   clipboard.buffer.getChannelData(0).set(
-    buffer.getChannelData(0).subarray(clipboard.start, clipboard.end));
+    buffer.getChannelData(0).subarray(start, end), 0);
   clipboard.buffer.getChannelData(1).set(
-    buffer.getChannelData(1).subarray(clipboard.start, clipboard.end));
+    buffer.getChannelData(1).subarray(start, end), 0);
 
   cb();
 }
