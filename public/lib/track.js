@@ -324,7 +324,6 @@ Track.prototype = {
     req.onloadend = function(ev) {
            self.fileIndicator.textContent = 'decoding audio data...';
 
-           debugger;
            self.context.decodeAudioData(req.response, function(buf) {
            self.fileIndicator.textContent = 'rendering wave...';
 

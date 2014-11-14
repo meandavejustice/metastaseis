@@ -2,6 +2,16 @@ html, body, input, button {
     font-family: monospace;
 }
 
+header {
+    top: 0;
+    background: #FFF;
+    width: 100%;
+    padding: 10px;
+    border-bottom: 2px solid #DDD;
+    position: fixed;
+    z-index: 4;
+}
+
 #info {
     display:none;
     position: fixed;
@@ -145,4 +155,14 @@ button {
 .welcome a {
     color: #F623F6;
     text-decoration: none;
+}
+
+.drawer {
+    position: absolute;
+    top: -100px;
+    right: 35px;
+}
+
+.drawer.active {
+    top: 50px;
 }

@@ -2,6 +2,7 @@ var EE = require('events').EventEmitter;
 var dragDrop = require('drag-drop');
 var AudioContext = require('audiocontext');
 var AudioSource = require('audiosource');
+var FFT = require('audio-fft');
 
 var colors = require('./lib/colors');
 var editor = require('./lib/edits');
@@ -14,6 +15,9 @@ var emitter = new EE();
 var audioContext = new AudioContext();
 var masterGainNode = audioContext.createGain();
 var uniqId = function() {return Math.random().toString(16).slice(2)};
+
+var drawer = document.querySelector('.drawer');
+var fft = new FFT(audioContext, {canvas: drawer.querySelector('#fft')});
 
 var workspaceEl = document.querySelector('#workspace');
 
@@ -44,9 +48,11 @@ var recording = false;
 
 recordBtn.addEventListener('click', function() {
   if (!recording) {
-    recorder.start(audioContext);
+    recorder.start(audioContext, fft);
+    drawer.classList.add('active');
     recording = true;
   } else {
+    drawer.classList.remove('active');
     recorder.stop(function(blob) {
                newTrackFromURL(URL.createObjectURL(blob));
              });

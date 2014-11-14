@@ -4,21 +4,29 @@ module.exports = {
   stop: stop
 }
 
-function getStream(context) {
+function getStream(context, fft) {
   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
   window.URL = window.URL || window.webkitURL;
 
   navigator.getUserMedia({audio: true}, function(stream) {
-    startUserMedia(context, stream);
+    startUserMedia(context, stream, fft);
   }, function(err) {
     console.log('No live audio input: ' + err);
   });
 }
 
-function startUserMedia(context, stream) {
+function startUserMedia(context, stream, fft) {
   var input = context.createMediaStreamSource(stream);
   console.log('Media stream created.');
 
+  if (fft) {
+    input.connect(fft.input);
+    // throw away gain node
+    var gainNode = context.createGain();
+    gainNode.gain.value = 0;
+    fft.connect(gainNode);
+    gainNode.connect(context.destination);
+  }
   // input.connect(context.destination); // might not actually want to do this
   console.log('Input connected to audio context destination.');
 
@@ -27,9 +35,9 @@ function startUserMedia(context, stream) {
   start();
 }
 
-function start(context) {
+function start(context, fft) {
   if (recorder === undefined) {
-    getStream(context)
+    getStream(context, fft)
   } else {
     recorder.record();
   }

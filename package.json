@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "audio-fft": "^0.1.0",
     "audiocontext": "^0.1.0",
     "audiosource": "^0.1.1",
     "drag-drop": "^2.0.0",

@@ -5,23 +5,29 @@
       <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
     </head>
     <body>
-      <input type="file" id="upload"></input>
-      <button disabled id="play">play</button>
-      <button disabled id="stop">stop</button>
-      <button disabled id="pause">pause</button>
-      <button disabled id="cut">cut</button>
-      <button disabled id="skip">skip</button>
-      <button disabled id="back">back</button>
-      <button disabled id="copy">copy</button>
-      <button disabled id="paste">paste</button>
-      <button disabled id="append">append</button>
-      <button disabled id="prepend">prepend</button>
-      <button disabled id="duplicate">duplicate</button>
-      <button disabled id="reverse">reverse</button>
-      <button disabled id="export">export</button>
-      <button disabled id="effects">apply effects</button>
-      <button id="record">record</button>
 
+      <header>
+        <input type="file" id="upload"></input>
+        <button disabled id="play">play</button>
+        <button disabled id="stop">stop</button>
+        <button disabled id="pause">pause</button>
+        <button disabled id="cut">cut</button>
+        <button disabled id="skip">skip</button>
+        <button disabled id="back">back</button>
+        <button disabled id="copy">copy</button>
+        <button disabled id="paste">paste</button>
+        <button disabled id="append">append</button>
+        <button disabled id="prepend">prepend</button>
+        <button disabled id="duplicate">duplicate</button>
+        <button disabled id="reverse">reverse</button>
+        <button disabled id="export">export</button>
+        <button disabled id="effects">apply effects</button>
+        <button id="record">record</button>
+      </header>
+
+      <div class="drawer">
+        <canvas id="fft" width="150" height="150"></canvas>
+      </div>
       <div id="workspace" class="dragdealer">
 
         <div class="welcome">
