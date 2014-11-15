@@ -23,7 +23,10 @@ var workspaceEl = document.querySelector('#workspace');
 
 // controls
 var welcome = document.querySelector('.welcome');
-var uploadBtn = document.querySelector('#upload');
+var welcomeImportBtn = welcome.querySelector('.import');
+var welcomeRecordBtn = document.querySelector('.record');
+var importBtn = document.querySelector('.import');
+var importInput = document.querySelector('#import')
 var playBtn = document.querySelector('#play');
 var pauseBtn = document.querySelector('#pause');
 var stopBtn = document.querySelector('#stop');
@@ -49,10 +52,12 @@ var recording = false;
 recordBtn.addEventListener('click', function() {
   if (!recording) {
     recorder.start(audioContext, fft);
+    recordBtn.innerText = 'stop recording';
     drawer.classList.add('active');
     recording = true;
   } else {
     drawer.classList.remove('active');
+    recordBtn.innerText = 'record';
     recorder.stop(function(blob) {
                newTrackFromURL(URL.createObjectURL(blob));
              });
@@ -67,7 +72,20 @@ dragDrop('body', function (files) {
   newTrackFromFile(files[0]);
 });
 
-uploadBtn.addEventListener('change', function(ev) {
+welcomeImportBtn.addEventListener('click', function() {
+  document.querySelector('#import').click();
+})
+
+welcomeRecordBtn.addEventListener('click', function() {
+  welcomeRecordBtn.querySelector('h4').innerText = 'stop recording';
+  document.querySelector('#record').click();
+})
+
+importBtn.addEventListener('click', function() {
+  document.querySelector('#import').click();
+})
+
+importInput.addEventListener('change', function(ev) {
   newTrackFromFile(ev.target.files[0]);
 });
 

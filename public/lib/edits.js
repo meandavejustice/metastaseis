@@ -60,7 +60,7 @@ function pasteBuffer(context, clipboard, buffer, at, cb) {
   at = at * buffer.sampleRate;
 
   // create replacement buffer with enough space for cliboard part
-  var nuPastedBuffer = context.createBuffer(2, buffer.length + (end - start) + 5, buffer.sampleRate);
+  var nuPastedBuffer = context.createBuffer(2, buffer.length + (end - start), buffer.sampleRate);
 
   // if our clip start point is not at '0' then we need to set the original
   // chunk, up to the clip start point
@@ -79,9 +79,6 @@ function pasteBuffer(context, clipboard, buffer, at, cb) {
     var newAt = at + (end - start);
     nuPastedBuffer.getChannelData(0).set(buffer.getChannelData(0).subarray(newAt), newAt);
     nuPastedBuffer.getChannelData(1).set(buffer.getChannelData(1).subarray(newAt), newAt);
-
-    // nuPastedBuffer.getChannelData(0).set(buffer.getChannelData(0), (at + (end - start)));
-    // nuPastedBuffer.getChannelData(1).set(buffer.getChannelData(1), (at + (end - start)));
   }
 
   cb(nuPastedBuffer);

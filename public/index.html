@@ -7,7 +7,8 @@
     <body>
 
       <header>
-        <input type="file" id="upload"></input>
+        <input type="file" id="import"></input>
+        <button class="import">import</button>
         <button disabled id="play">play</button>
         <button disabled id="stop">stop</button>
         <button disabled id="pause">pause</button>
@@ -31,10 +32,22 @@
       <div id="workspace" class="dragdealer">
 
         <div class="welcome">
-          <h3>Welcome to meandave's wave editor</h3>
+          <a href="https://en.wikipedia.org/wiki/Metastaseis_(Xenakis)"><h2>M E T A - S T A S E I S</h2></a>
+          <h4>(meandave's wave editor)</h4>
+
+          <div class="started">
+            <div class="lrg-btn import">
+              <h4>import a file</h4>
+              <p>(or drag n drop)</p>
+            </div>
+
+            <div class="lrg-btn record">
+              <h4>Record</h4>
+            </div>
+          </div>
           <p>If you are reading this you have <span>V</span><span>I</span><span>P</span> access.</p>
           <p>please do not share this with anyone.</p>
-          <p>I am still looking for a name for this, if you would like to submit an idea, you can do that <a href="/feedback">here</a></p>
+          <p>I am still unsure about the current project name, if you would like to submit an idea, you can do that <a href="/feedback">here</a></p>
 
           <p>The following functionality works!</p>
           <ul>
@@ -42,25 +55,26 @@
             <li>pause/play</li>
             <li>cut</li>
             <li>copy</li>
-            <li>paste(only prepends to beginning of wave atm)</li>
+            <li>paste</li>
             <li>play mutiple <i>active</i> waves</li>
             <li>reverse (reverses wave in place)</li>
             <li>append (appends clipboard to end of wave)</li>
             <li>prepend (prepends clipboard to beginning of wave)</li>
             <li>seeking</li>
             <li>drag file uploads</li>
+            <li>recording</li>
           </ul>
 
           <p>coming soon...</p>
           <ul>
-            <li>recording</li>
             <li>export as WAV & Mp3</li>
-            <li>apply a myriad of effects to waves</li>
+            <li>apply a limited # of effects to waves (maybe)</li>
             <li>skip forward and backward</li>
             <li>a jazzier ui for editing (more drag n drop)</li>
             <li>proper paste functionality</li>
             <li>upload to soundcloud</li>
           </ul>
+
         </div>
       </div>
 

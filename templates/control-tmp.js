@@ -20,5 +20,9 @@ module.exports = function(data) {
                  h('i.rem', "00:00:00")))),
            h('span.collapse', "collapse"),
            h('br'),
-           h('span.remove', "remove"));
+           h('span.remove', "remove"),
+           h('br'),
+           h('span.export', "export"),
+           h('br'),
+           h('span.upload', "upload to soundcloud"));
 }

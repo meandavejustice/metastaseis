@@ -6,7 +6,7 @@ header {
     top: 0;
     background: #FFF;
     width: 100%;
-    padding: 10px;
+    padding: 10px 10%;
     border-bottom: 2px solid #DDD;
     position: fixed;
     z-index: 4;
@@ -28,7 +28,7 @@ header {
 }
 
 #workspace {
-    margin-top: 100px;
+    margin-top: 90px;
 }
 
 #workspace > p {
@@ -60,7 +60,7 @@ button {
 }
 
 .track.active {
-    box-shadow: 0px 0px 6px 5px #FFC32B;
+    box-shadow: 0px 0px 6px 5px #FFAF68;
 }
 
 .track.collapsed {
@@ -149,7 +149,9 @@ button {
     width: 600px;
     margin: 0 auto;
 }
-.welcome h3 {
+.welcome h2,
+.welcome h4 {
+    font-family: monospace;
     text-align: center;
 }
 .welcome a {
@@ -165,4 +167,41 @@ button {
 
 .drawer.active {
     top: 50px;
+}
+
+.lrg-btn {
+    width: 45%;
+    float: left;
+    border: 1px solid #000;
+    min-height: 80px;
+    margin: 13px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.lrg-btn:hover {
+    box-shadow: 1px 1px;
+}
+
+.lrg-btn h4, .lrg-btn p {
+    margin: 0;
+}
+
+.lrg-btn h4 {
+    margin-top: 10%;
+}
+
+#import {
+    position: absolute;
+    left: -1500px;
+}
+
+.info > p {
+    width: 160px;
+}
+
+.title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
