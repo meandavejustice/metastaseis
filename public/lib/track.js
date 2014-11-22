@@ -60,17 +60,17 @@ function Track(opts) {
     this.gainNode.gain.value = parseFloat(ev.target.value);
   }.bind(this));
 
-  this.containEl.querySelector('.de').addEventListener('click', function(ev) {
+  this.containEl.querySelector('.activate').addEventListener('click', function(ev) {
     var el = ev.target;
 
-    if (el.textContent === 'deactivate') {
+    if (el.classList.contains('active')) {
       this.active = false;
+      el.classList.remove('active');
       this.trackEl.classList.remove('active');
-      el.textContent = 'activate';
     } else {
       this.active = true;
+      el.classList.add('active');
       this.trackEl.classList.add('active');
-      el.textContent = 'deactivate';
     }
   }.bind(this));
 
@@ -143,26 +143,26 @@ function Track(opts) {
   this.containEl.querySelector('.mute').addEventListener('click', function(ev) {
     var el = ev.target;
 
-    if (el.textContent === 'mute') {
+    if (el.classList.contains('active')) {
+      this.gainNode.gain.value = this.lastGainValue;
+      this.gainEl.value = this.lastGainValue;
+      el.classList.remove('active');
+    } else {
       this.lastGainValue = this.gainNode.gain.value;
       this.gainNode.gain.value = 0;
       this.gainEl.value = 0;
-      el.textContent = 'unmute';
-    } else {
-      this.gainNode.gain.value = this.lastGainValue;
-      this.gainEl.value = this.lastGainValue;
-      el.textContent = 'mute';
+      el.classList.add('active');
     }
   }.bind(this));
 
-  this.containEl.querySelector('.selecting').addEventListener('click', function(ev) {
+  this.containEl.querySelector('.edit').addEventListener('click', function(ev) {
     var el = ev.target;
-    if (el.textContent === 'hide selection') {
-      el.textContent = 'show selection';
+    if (el.classList.contains('active')) {
+      el.classList.remove('active');
       this.selecting = false;
       this.selection.style.display = 'none';
     } else {
-      el.textContent = 'hide selection';
+      el.classList.add('active');
       this.selecting = true;
       this.selection.style.display = 'block';
     }
@@ -170,11 +170,11 @@ function Track(opts) {
 
   this.containEl.querySelector('.collapse').addEventListener('click', function(ev) {
     var el = ev.target;
-    if (el.textContent === 'collapse') {
-      el.textContent = 'expand';
+    if (el.classList.contains('active')) {
+      el.classList.remove('active');
       this.trackEl.classList.add('collapsed');
     } else {
-      el.textContent = 'collapse';
+      el.classList.add('active')
       this.trackEl.classList.remove('collapsed');
     }
   }.bind(this));
@@ -202,7 +202,7 @@ function Track(opts) {
 
   this.containEl.querySelector('.remove').addEventListener('click', function(ev) {
     this.stop();
-    ev.target.parentElement.parentNode.remove();
+    ev.target.parentElement.parentNode.parentNode.remove();
     this.emitter.emit('tracks:remove', {id: this.id});
     this.emitter = null;
   }.bind(this));

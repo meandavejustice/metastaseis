@@ -2,7 +2,7 @@ html, body, input, button {
     font-family: monospace;
 }
 
-header {
+body > header {
     top: 0;
     background: #FFF;
     width: 100%;
@@ -37,8 +37,96 @@ header {
 
 .track-space .control {
     float: left;
-    padding-top: 50px;
-    padding-left: 5px;
+    width: 250px;
+    clear: both;
+    background: #F6F6F6;
+}
+
+.track-space .control header {
+  padding: 4px 20px;
+  border-radius: 2px;
+  background-image: -webkit-gradient(
+	    linear,
+	    left top,
+	    left bottom,
+	    color-stop(0, #47FFCE),
+	    color-stop(1, #7DFF66)
+  );
+  background-image: -o-linear-gradient(bottom, #47FFCE 0%, #7DFF66 100%);
+  background-image: -moz-linear-gradient(bottom, #47FFCE 0%, #7DFF66 100%);
+  background-image: -webkit-linear-gradient(bottom, #47FFCE 0%, #7DFF66 100%);
+  background-image: -ms-linear-gradient(bottom, #47FFCE 0%, #7DFF66 100%);
+  background-image: linear-gradient(to bottom, #47FFCE 0%, #7DFF66 100%);
+  color: #2F2F2F;
+}
+
+.track-space .control .actions li {
+    display: inline-block;
+    list-style: none;
+    border: 1px solid #000;
+    margin: 0;
+    float: left;
+    width: 50px;
+    height: 50px;
+    background-position: 50%;
+    background-size: 75%;
+    background-repeat: no-repeat;
+    border-radius: 2px;
+    margin: 1px;
+}
+
+.track-space .control .actions li:hover {
+    box-shadow: 1px 1px;
+}
+
+.track-space .control .actions li.active {
+    box-shadow: inset 1px 1px 5px;
+}
+
+.track-space .control .actions li.active:hover {
+    box-shadow: inset 1px 1px 5px;
+}
+
+.track-space .control .actions .edit {
+    background-image: url('img/edit.svg');
+}
+
+.track-space .control .actions .remove {
+    background-image: url('img/remove2.svg');
+}
+
+.track-space .control .actions .activate {
+    background-image: url('img/activate.svg');
+}
+
+.track-space .control .actions .mute {
+    background-image: url('img/mute.svg');
+}
+
+.track-space .control .actions .collapse {
+    background-image: url('img/collapse.svg');
+}
+
+.track-space .control .actions .export {
+    background-image: url('img/export2.svg');
+}
+
+.track-space .control .actions {
+    margin: 0 auto;
+    padding: 0;
+    padding-top: 10px;
+    clear: both;
+}
+
+.track-space .control .volume input {
+    width: 80%;
+    margin: 15px;
+    margin-left: 10%;
+}
+
+.track-space .control .info {
+  float: left;
+  padding: 0 10px;
 }
 
 button {
@@ -55,8 +143,10 @@ button {
     background: rgba(189, 189, 189, 0.74);
     width: 70%;
     height: 300px;
-    margin: 0 auto 20px;
+
+    margin: 0 auto 20px 15px;
     position: relative;
+    float: left;
 }
 
 .track.active {
@@ -90,9 +180,11 @@ button {
 .track p {
     position: absolute;
     top: 30%;
-    left: 42%;
     font-size: 25px;
     color: #72DDB3;
+    width: 100%;
+    text-align: center;
+    text-shadow: 1px 1px 1px #8A8A8A;
 }
 
 .play-cursor {
@@ -177,6 +269,28 @@ button {
     margin: 13px;
     text-align: center;
     cursor: pointer;
+    margin-bottom: 30px;
+}
+
+.lrg-btn.import svg:first-child {
+    margin-left: 30px;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.lrg-btn.import svg:nth-child(2) {
+    margin-left: -20px;
+    margin-bottom: 14px;
+    transform: rotate(-30deg);
+}
+
+.lrg-btn.record h4 {
+    display: none;
+    color: #fff;
+}
+
+.lrg-btn.record svg {
+    margin-top: 5px;
 }
 
 .lrg-btn:hover {
@@ -196,12 +310,21 @@ button {
     left: -1500px;
 }
 
-.info > p {
-    width: 160px;
-}
-
 .title {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 98%;
+}
+
+footer a {
+    color: #F623F6;
+    text-decoration: none;
+    float: right;
+    margin-bottom: 10px;
 }

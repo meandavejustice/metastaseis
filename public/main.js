@@ -66,9 +66,7 @@ recordBtn.addEventListener('click', function() {
 })
 
 dragDrop('body', function (files) {
-  if (welcome) {
-    welcome.remove();
-  }
+  welcome.style.display = 'none';
   newTrackFromFile(files[0]);
 });
 
@@ -285,7 +283,7 @@ function newTrackFromFile(file) {
     // alert(file.type + ' files are not supported.');
     return;
   }
-  if (welcome) welcome.remove();
+  welcome.style.display = 'none';
   var containerEl = trackTmp({
     title: file.name
   });
@@ -302,13 +300,14 @@ function newTrackFromFile(file) {
     tracks[ev.id] = null;
     delete tracks[ev.id];
     this.removeAllListeners();
+    showWelcome();
   });
   tracks[id].loadFile(file);
   enablePlaybackOpts();
 }
 
 function newTrackFromURL(url) {
-  if (welcome) welcome.remove();
+  welcome.style.display = 'none';
   var containerEl = trackTmp({
     title: "Recording 1"
   });
@@ -325,7 +324,12 @@ function newTrackFromURL(url) {
     tracks[ev.id] = null;
     delete tracks[ev.id];
     this.removeAllListeners();
+    showWelcome();
   });
   tracks[id].loadURL(url);
   enablePlaybackOpts();
+}
+
+function showWelcome() {
+  if (!Object.keys(tracks).length) welcome.style.display = 'block';
 }
