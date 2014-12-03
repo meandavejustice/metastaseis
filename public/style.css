@@ -2,6 +2,10 @@ html, body, input, button {
     font-family: monospace;
 }
 
+.welcome a.title {
+    cursor: help;
+}
+
 body > header {
     top: 0;
     background: #FFF;
