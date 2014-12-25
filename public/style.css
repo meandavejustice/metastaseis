@@ -47,21 +47,21 @@ body > header {
 }
 
 .track-space .control header {
-  padding: 4px 20px;
-  border-radius: 2px;
-  background-image: -webkit-gradient(
-	    linear,
-	    left top,
-	    left bottom,
-	    color-stop(0, #47FFCE),
-	    color-stop(1, #7DFF66)
-  );
-  background-image: -o-linear-gradient(bottom, #47FFCE 0%, #7DFF66 100%);
-  background-image: -moz-linear-gradient(bottom, #47FFCE 0%, #7DFF66 100%);
-  background-image: -webkit-linear-gradient(bottom, #47FFCE 0%, #7DFF66 100%);
-  background-image: -ms-linear-gradient(bottom, #47FFCE 0%, #7DFF66 100%);
-  background-image: linear-gradient(to bottom, #47FFCE 0%, #7DFF66 100%);
-  color: #2F2F2F;
+    padding: 4px 20px;
+    border-radius: 2px;
+    background-image: -webkit-gradient(
+	                            linear,
+	                            left top,
+	                            left bottom,
+	                            color-stop(0, #47FFCE),
+	                            color-stop(1, #7DFF66)
+                          );
+    background-image: -o-linear-gradient(bottom, #47FFCE 0%, #7DFF66 100%);
+    background-image: -moz-linear-gradient(bottom, #47FFCE 0%, #7DFF66 100%);
+    background-image: -webkit-linear-gradient(bottom, #47FFCE 0%, #7DFF66 100%);
+    background-image: -ms-linear-gradient(bottom, #47FFCE 0%, #7DFF66 100%);
+    background-image: linear-gradient(to bottom, #47FFCE 0%, #7DFF66 100%);
+    color: #2F2F2F;
 }
 
 .track-space .control .actions li {
@@ -129,8 +129,8 @@ body > header {
 }
 
 .track-space .control .info {
-  float: left;
-  padding: 0 10px;
+    float: left;
+    padding: 0 10px;
 }
 
 button {
@@ -151,6 +151,12 @@ button {
     margin: 0 auto 20px 15px;
     position: relative;
     float: left;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 }
 
 .track.active {
@@ -331,4 +337,48 @@ footer a {
     text-decoration: none;
     float: right;
     margin-bottom: 10px;
+}
+
+.clear {
+    clear: both;
+}
+
+.timeline ul {
+    position: relative;
+}
+.timeline ul li {
+    display: inline-block;
+    width: 50px;
+}
+
+.timeline ul li:before {
+    content: '|';
+    position: absolute;
+    bottom: -15px;
+    margin-left: 4px;
+}
+
+.timeline ul li:first-child:before {
+    margin-left: 0px;
+}
+
+.timeline ul li:nth-child(2):before {
+    margin-left: 0px;
+}
+
+.timeline ul li:after {
+    content: '| | | |';
+    position: absolute;
+    bottom: -14px;
+    font-size: 10px;
+    letter-spacing: 0px;
+    margin-left: 0px;
+}
+
+.timeline ul li:first-child:after {
+    margin-left: 4px;
+}
+
+.timeline ul li:nth-child(2):after {
+    margin-left: 5px;
 }

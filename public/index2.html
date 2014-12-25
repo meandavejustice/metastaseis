@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="//chantastic.s3.amazonaws.com/tip.0.3.0.min.css">
+    <!-- <link rel="stylesheet" href="style.css" type="text/css" media="screen" /> -->
+  </head>
+  <body>
+
+    <header>
+      <input type="file" id="import"></input>
+      <button class="import">import</button>
+      <button disabled id="play">play</button>
+      <button disabled id="stop">stop</button>
+      <button disabled id="pause">pause</button>
+      <button disabled id="cut">cut</button>
+      <button disabled id="skip">skip</button>
+      <button disabled id="back">back</button>
+      <button disabled id="copy">copy</button>
+      <button disabled id="paste">paste</button>
+      <button disabled id="append">append</button>
+      <button disabled id="prepend">prepend</button>
+      <button disabled id="duplicate">duplicate</button>
+      <button disabled id="reverse">reverse</button>
+      <button disabled id="export">export</button>
+      <button disabled id="effects">apply effects</button>
+      <button id="record">record
+      </button>
+    </header>
+
+    <div id="workspace" class="dragdealer">
+      <div class="project-space">
+        <div class="control-space">
+          <div class="time-setting">
+            <p>blah blah blah</p>
+          </div>
+          <div class="control">
+            <header><p>Knxwledge. - Ovrstnd.B.Sde_ - 10 10. fornevr_.mp3</p></header>
+            
+            <ul class="actions">
+              <li data-tip-content="activate" data-has-tip class="activate active"></li>
+              <li data-tip-content="edit" data-has-tip class="edit active"></li>
+              <li data-tip-content="mute" data-has-tip class="mute"></li>
+              <li data-tip-content="export" data-has-tip class="export"></li>
+              <li data-tip-content="collapse" data-has-tip class="collapse"></li>
+              <li data-tip-content="remove" data-has-tip class="remove"></li>
+            </ul>
+            
+            <div class="volume"><input type="range" min="0" max="1" step=".05"></div><article class="info"><p>Current Time: <i class="cur">00:00:00</i></p><p>Duration: <i class="dur">01:31:42</i></p><p>Remaining: <i class="rem">00:00:00</i></p></article></div>
+          <div class="control">
+            <header><p>Knxwledge. - Ovrstnd.B.Sde_ - 10 10. fornevr_.mp3</p></header><ul class="actions"><li class="activate active" title="activate"></li><li class="edit active" title="edit"></li><li class="mute" title="mute"></li><li class="export" title="export"></li><li class="collapse" title="collapse"></li><li class="remove" title="remove"></li></ul><div class="volume"><input type="range" min="0" max="1" step=".05"></div><article class="info"><p>Current Time: <i class="cur">00:00:00</i></p><p>Duration: <i class="dur">01:31:42</i></p><p>Remaining: <i class="rem">00:00:00</i></p></article></div>
+          <div class="control">
+            <header><p>Knxwledge. - Ovrstnd.B.Sde_ - 10 10. fornevr_.mp3</p></header><ul class="actions"><li class="activate active" title="activate"></li><li class="edit active" title="edit"></li><li class="mute" title="mute"></li><li class="export" title="export"></li><li class="collapse" title="collapse"></li><li class="remove" title="remove"></li></ul><div class="volume"><input type="range" min="0" max="1" step=".05"></div><article class="info"><p>Current Time: <i class="cur">00:00:00</i></p><p>Duration: <i class="dur">01:31:42</i></p><p>Remaining: <i class="rem">00:00:00</i></p></article></div>
+          <div class="control">
+            <header><p>Knxwledge. - Ovrstnd.B.Sde_ - 10 10. fornevr_.mp3</p></header><ul class="actions"><li class="activate active" title="activate"></li><li class="edit active" title="edit"></li><li class="mute" title="mute"></li><li class="export" title="export"></li><li class="collapse" title="collapse"></li><li class="remove" title="remove"></li></ul><div class="volume"><input type="range" min="0" max="1" step=".05"></div><article class="info"><p>Current Time: <i class="cur">00:00:00</i></p><p>Duration: <i class="dur">01:31:42</i></p><p>Remaining: <i class="rem">00:00:00</i></p></article></div>
+        </div>
+        <div class="track-space">
+          <div class="timeline-contain">
+            <ul class="timeline">
+              <li><span>0<span></li>
+              <li><span>5<span></li>
+              <li><span>10<span></li>
+              <li><span>15<span></li>
+              <li><span>20<span></li>
+              <li><span>25<span></li>
+              <li><span>30<span></li>
+              <li><span>35<span></li>
+              <li><span>40<span></li>
+              <li><span>45<span></li>
+              <li><span>50<span></li>
+              <li><span>55<span></li>
+              <li><span>1:00<span></li>
+            </ul>
+          </div>
+          <div class="track active">
+            <div class="play-cursor"></div>
+            <div class="selection"></div>
+            <div class="wave selectable">
+              <canvas height="300" width="1106"></canvas>
+            </div>
+            <div class="wave-progress selectable">
+              <canvas height="300" width="1106"></canvas>
+            </div>
+          </div>
+
+          <div class="track active">
+            <div class="play-cursor"></div>
+            <div class="selection"></div>
+            <div class="wave selectable">
+              <canvas height="300" width="1106"></canvas>
+            </div>
+            <div class="wave-progress selectable">
+              <canvas height="300" width="1106"></canvas>
+            </div>
+          </div>
+
+          <div class="track active">
+            <div class="play-cursor"></div>
+            <div class="selection"></div>
+            <div class="wave selectable">
+              <canvas height="300" width="1106"></canvas>
+            </div>
+            <div class="wave-progress selectable">
+              <canvas height="300" width="1106"></canvas>
+            </div>
+          </div>
+
+          <div class="track active">
+            <div class="play-cursor"></div>
+            <div class="selection"></div>
+            <div class="wave selectable">
+              <canvas height="300" width="1106"></canvas>
+            </div>
+            <div class="wave-progress selectable">
+              <canvas height="300" width="1106"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <footer><a href="/feedback">feedback</a></footer>
+      <!-- <script type="text/javascript" src="recorder.js"></script> -->
+      <!-- <script type="text/javascript" src="bundle.js"></script> -->
+      <script>
+       var trackSpace = document.querySelector('.track-space');
+       var timelineContainer = document.querySelector('.timeline-contain');
+
+       timelineContainer.addEventListener('scroll', function(ev) {
+         trackSpace.scrollLeft = timelineContainer.scrollLeft;
+       });
+
+       trackSpace.addEventListener('scroll', function(ev) {
+         timelineContainer.scrollLeft = trackSpace.scrollLeft;
+       });
+      </script>
+    </body>
+</html>

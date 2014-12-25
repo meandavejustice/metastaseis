@@ -1,0 +1,151 @@
+@require 'nib'
+@require 'jeet'
+
+#workspace
+  clearfix()
+  padding-top: 70px
+  padding-left: 10px
+  margin-bottom: 12px
+
+  .project-space
+    clearfix()
+    width: 100%
+    height: 100%
+
+  .control-space
+    col(1/6)
+
+    .time-setting
+      padding-bottom: 20px
+
+    .control
+      background: #F6F6F6
+      height: 305px
+
+      header
+        padding: 4px 20px
+        border-radius(2px)
+        background: linear-gradient(top, #47FFCE, #7DFF66)
+        color: #2F2F2F
+
+      .actions
+        center(90%)
+
+      .actions li
+        display: inline-block
+        list-style: none
+        border: 1px solid #000
+        margin: 0
+        float: left
+        width: 50px
+        height: 50px
+        background-position: 50%
+        background-size: 75%
+        background-repeat: no-repeat
+        border-radius(2px)
+        margin: 1px
+
+  .track-space
+    overflow-x: scroll
+    overflow-y: hidden
+    col(5/6)
+
+    .timeline-contain
+      position: fixed
+      top: 50px
+      z-index: 5
+      height: 50px
+      background: #FFF
+      padding-top: 20px
+      overflow-x: scroll
+      width: 81.5%
+      overflow-y: hidden
+      border-right: 12px solid #FFF
+
+    .timeline
+      position: relative
+      width: 4000px
+  
+      li
+        display: inline-block
+        width: 65px
+        &:before
+          content: '|'
+          position: absolute
+          bottom: -15px
+          margin-left: 4px
+        &:first-child:before
+          margin-left: 0px
+        &:nth-child(2):before
+          margin-left: 0px
+        &:after
+          content: '| | | |'
+          position: absolute
+          bottom: -14px
+          font-size: 10px
+          letter-spacing: 5px
+          margin-left: 0px
+        &:first-child:after
+          margin-left: 4px
+        &:nth-child(2):after
+          margin-left: 5px
+
+    .track
+      border: 1px solid #909090
+      border-bottom: 3px solid #909090
+      border-right: 3px solid #909090
+      padding: 0
+      background: rgba(189, 189, 189, 0.74)
+      height: 300px
+      width: 4000px;
+  
+      position: relative
+      float: left
+      user-select(none)
+
+      p
+        position: absolute
+        top: 30%
+        font-size: 25px
+        color: #72DDB3
+        width: 100%
+        text-align: center
+        text-shadow: 1px 1px 1px #8A8A8A
+
+      .play-cursor
+        width: 1px
+        border-left: 1px solid #FFA239
+        height: 100%
+        position: absolute
+        left: 0px
+
+      .paste-cursor
+        width: 1px
+        border-left: 1px solid #2CE5F5
+        height: 100%
+        position: absolute
+        left: 0px
+        display: none
+
+      .selection
+        width: 0px
+        left: 0px
+        height: 100%
+        background: rgba(89, 100, 92, 0.45)
+        position: absolute
+        border-left: 1px solid transparent
+        border-right: 1px solid transparent
+        -webkit-filter: hue-rotate(90deg)
+        z-index: 3
+
+      .wave-progress
+        width: 0
+        height: 100%
+        position: absolute
+        top: 0
+        z-index: 2
+        overflow: hidden
+
+      .wave
+        width: 100%
+        height: 100%
