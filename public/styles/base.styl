@@ -7,8 +7,8 @@ better-font()
   -moz-osx-font-smoothing: grayscale
   text-rendering: optimizeLegibility
   font-feature-settings: 'liga', 'kern'
-  font-family: monospace, sans-serif
-  // font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Arial, Helvetica, sans-serif
+  //  font-family: monospace, sans-serif
+  font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Arial, Helvetica, sans-serif
   font-weight: 300
 
 html, body
@@ -30,19 +30,87 @@ body > header
   fixed: top;
   z-index: 4
 
+  button
+    width: 70px
+    height: 30px
+    padding-bottom: 9px
+
+    background-position: 50% 50%
+    background-size: contain
+    background-repeat: no-repeat
+
 footer
   fixed: bottom
   width: 100%
   background: white
   z-index: 4
+  box-shadow: 0px -1px 4px -2px #000
 
   a
-    color: #F623F6
+    color: rgba(246, 35, 243, 0.77)
     text-decoration: none
+
+    margin: 0 10px
+    padding: 10px
+    float: left
+    &:hover
+      color: #07EC81
+
+  a:nth-child(2)
     float: right
-    margin-bottom: 10px
-    margin-right: 10px
 
 #import 
   position: absolute
   left: -1500px
+
+.import
+  background-image: url("img/import.svg")
+  background-size: 50%
+  margin-left: 30px;
+
+#play
+  background-image: url("img/play.svg")
+  background-size: 30%
+
+#pause
+  background-image: url("img/pause.svg")
+  background-size: 30%
+
+#stop
+  background-image: url("img/stop.svg")
+  background-size: 30%
+
+#back
+  background-image: url("img/back.svg")
+  background-size: 35%
+
+#skip
+  background-image: url("img/forward.png")
+  background-size: inherit
+
+#paste
+  background-image: url("img/paste.svg")
+
+#cut
+  background-image: url("img/cut.svg")
+  background-size: 35%
+
+#copy
+  background-image: url("img/copy.svg")
+
+#paste
+  background-image: url("img/paste.svg")
+
+#duplicate
+  width: 80px
+
+#effects
+  background-image: url("img/effects.svg")
+
+#export
+  background-image: url("img/export.svg")
+  background-size: 30%
+
+#record
+  background-image: url("img/recording.svg")
+  background-size: 50%

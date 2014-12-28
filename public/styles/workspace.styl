@@ -13,23 +13,49 @@
     height: 100%
 
   .control-space
-    col(1/6)
+    // col(1/6)
+    float: left
+    clear: none
+    text-align: inherit
+    width: 16.666667%
+    margin-left: 0%
+    margin-right: 0.5%
+    padding-bottom: 28px
 
     .time-setting
-      padding-bottom: 20px
+      padding: 0px 15px 10px
+      text-align: center
+      small
+        color: #797979
+      h1
+        font-size: 25px
+        text-shadow: 2px 2px 2px #FFB02E
+        color: #525252
 
     .control
       background: #F6F6F6
-      height: 305px
+      height: 300px
+      border: 1px solid #C7C7C7
+      border-top: 0px
+      border-radius(4px)
+
+      .info
+        padding: 10px
+        p
+          padding: 3px
 
       header
-        padding: 4px 20px
-        border-radius(2px)
+        padding: 20px
+        border-radius(4px)
         background: linear-gradient(top, #47FFCE, #7DFF66)
         color: #2F2F2F
 
+        p
+          overflow: ellipsis
+
       .actions
         center(90%)
+        margin: 10px 25px 0px
 
       .actions li
         display: inline-block
@@ -45,26 +71,56 @@
         border-radius(2px)
         margin: 1px
 
+        &:hover
+          box-shadow: 1px 1px
+        &.active
+          box-shadow: inset 1px 1px 5px
+          &:hover
+            box-shadow: inset 1px 1px 5px
+
+        &.edit
+          background-image: url('img/edit.svg')
+        &.remove
+          background-image: url('img/remove2.svg')
+        &.activate
+          background-image: url('img/activate.svg')
+        &.mute
+          background-image: url('img/mute.svg')
+          background-size: 50%
+        &.collapse
+          background-image: url('img/collapse.svg')
+        &.export
+          background-image: url('img/export2.svg')
+          background-size: 50%
+
+    .time-setting + .control
+      border-top: 1px !important
+
   .track-space
     overflow-x: scroll
     overflow-y: hidden
+    padding-top: 50px
+    box-shadow: inset 6px 6px 7px #000
     col(5/6)
 
     .timeline-contain
       position: fixed
-      top: 50px
-      z-index: 5
+      top: 51px
+      z-index: 3
       height: 50px
       background: #FFF
       padding-top: 20px
       overflow-x: scroll
-      width: 81.5%
+      width: 82.5%;
       overflow-y: hidden
       border-right: 12px solid #FFF
+
+      box-shadow: 5px 6px 9px 0px rgba(0, 0, 0, 0.41)
 
     .timeline
       position: relative
       width: 4000px
+      padding-left: 2px;
   
       li
         display: inline-block
@@ -91,9 +147,8 @@
           margin-left: 5px
 
     .track
-      border: 1px solid #909090
-      border-bottom: 3px solid #909090
-      border-right: 3px solid #909090
+      border-bottom: 1px solid #909090
+      border-right: 1px solid #909090
       padding: 0
       background: rgba(189, 189, 189, 0.74)
       height: 300px
@@ -149,3 +204,24 @@
       .wave
         width: 100%
         height: 100%
+
+.volume {
+    display: inline-block
+    margin: 10px 5px
+    width:200px
+    height: 14px
+    background: rgba(88, 88, 88, 0.3)
+    border-radius: 2px
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.2)
+}
+
+.volume-bar {
+    height: 10px
+    width: 75%
+    margin: 2px
+    display: block
+    border-radius: 2px
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 1px 1px rgba(0,0,0,0.5)
+    background: #8aa7f7
+    background: linear-gradient(to right, #8aa7f7 0%,#77d3e7 34%,#43eab2 65%,#95ef83 100%)
+}

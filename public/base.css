@@ -7,7 +7,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-feature-settings: 'liga', 'kern';
-  font-family: monospace, sans-serif;
+  font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: 300;
 }
 button {
@@ -25,21 +25,109 @@ body > header {
   top: 0;
   z-index: 4;
 }
+body > header button {
+  width: 70px;
+  height: 30px;
+  padding-bottom: 9px;
+  background-position: 50% 50%;
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
 footer {
   position: fixed;
   bottom: 0;
   width: 100%;
   background: #fff;
   z-index: 4;
+  -webkit-box-shadow: 0px -1px 4px -2px #000;
+  box-shadow: 0px -1px 4px -2px #000;
 }
 footer a {
-  color: #f623f6;
+  color: rgba(246,35,243,0.77);
   text-decoration: none;
+  margin: 0 10px;
+  padding: 10px;
+  float: left;
+}
+footer a:hover {
+  color: #07ec81;
+}
+footer a:nth-child(2) {
   float: right;
-  margin-bottom: 10px;
-  margin-right: 10px;
 }
 #import {
   position: absolute;
   left: -1500px;
+}
+.import {
+  background-image: url("img/import.svg");
+  -webkit-background-size: 50%;
+  -moz-background-size: 50%;
+  background-size: 50%;
+  margin-left: 30px;
+}
+#play {
+  background-image: url("img/play.svg");
+  -webkit-background-size: 30%;
+  -moz-background-size: 30%;
+  background-size: 30%;
+}
+#pause {
+  background-image: url("img/pause.svg");
+  -webkit-background-size: 30%;
+  -moz-background-size: 30%;
+  background-size: 30%;
+}
+#stop {
+  background-image: url("img/stop.svg");
+  -webkit-background-size: 30%;
+  -moz-background-size: 30%;
+  background-size: 30%;
+}
+#back {
+  background-image: url("img/back.svg");
+  -webkit-background-size: 35%;
+  -moz-background-size: 35%;
+  background-size: 35%;
+}
+#skip {
+  background-image: url("img/forward.png");
+  -webkit-background-size: inherit;
+  -moz-background-size: inherit;
+  background-size: inherit;
+}
+#paste {
+  background-image: url("img/paste.svg");
+}
+#cut {
+  background-image: url("img/cut.svg");
+  -webkit-background-size: 35%;
+  -moz-background-size: 35%;
+  background-size: 35%;
+}
+#copy {
+  background-image: url("img/copy.svg");
+}
+#paste {
+  background-image: url("img/paste.svg");
+}
+#duplicate {
+  width: 80px;
+}
+#effects {
+  background-image: url("img/effects.svg");
+}
+#export {
+  background-image: url("img/export.svg");
+  -webkit-background-size: 30%;
+  -moz-background-size: 30%;
+  background-size: 30%;
+}
+#record {
+  background-image: url("img/recording.svg");
+  -webkit-background-size: 50%;
+  -moz-background-size: 50%;
+  background-size: 50%;
 }
