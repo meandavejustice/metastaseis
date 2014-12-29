@@ -1,14 +1,14 @@
 {
   "name": "metastaseis",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "in browser audio wave editor, in the vein of audacity",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "watchify -o public/bundle.js -v -d public/main.js & nodemon server.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "meandave",
+  "license": "BSD",
   "dependencies": {
     "audio-fft": "^0.1.0",
     "audiocontext": "^0.1.0",
@@ -23,5 +23,9 @@
     "routes-router": "^4.1.1",
     "st": "^0.5.2",
     "webworkify": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.2.1",
+    "watchify": "^2.2.1"
   }
 }

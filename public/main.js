@@ -4,7 +4,6 @@ var AudioContext = require('audiocontext');
 var AudioSource = require('audiosource');
 var FFT = require('audio-fft');
 
-var colors = require('./lib/colors');
 var editor = require('./lib/edits');
 var recorder = require('./lib/record');
 var Track = require('./lib/track');
@@ -40,12 +39,6 @@ var reverseBtn = document.querySelector('#reverse');
 var removeBtn = document.querySelector('#remove');
 var recordBtn = document.querySelector('#record');
 var tracks = {};
-
-var vips = welcome.querySelectorAll('span');
-
-for(var i=0; i<vips.length; i++){
-  colors.start(vips[i], 300);
-}
 
 var recording = false;
 
