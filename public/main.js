@@ -10,6 +10,7 @@ var recorder = require('./lib/record');
 var Track = require('./lib/track');
 
 var trackTmp = require('../templates/track-tmp');
+var controlTmp = require('../templates/control-tmp');
 
 var emitter = new EE();
 var audioContext = new AudioContext();
@@ -19,12 +20,14 @@ var uniqId = function() {return Math.random().toString(16).slice(2)};
 var drawer = document.querySelector('.drawer');
 var fft = new FFT(audioContext, {canvas: drawer.querySelector('#fft')});
 
+var controlSpaceEl = document.querySelector('.control-space');
 var workspaceEl = document.querySelector('#workspace');
+var trackSpaceEl = document.querySelector('.track-space');
 
 // controls
-var welcome = document.querySelector('.welcome');
-var welcomeImportBtn = welcome.querySelector('.import');
-var welcomeRecordBtn = document.querySelector('.record');
+// var welcome = document.querySelector('.welcome');
+// var welcomeImportBtn = welcome.querySelector('.import');
+// var welcomeRecordBtn = document.querySelector('.record');
 var importBtn = document.querySelector('.import');
 var importInput = document.querySelector('#import')
 var playBtn = document.querySelector('#play');
@@ -41,11 +44,11 @@ var removeBtn = document.querySelector('#remove');
 var recordBtn = document.querySelector('#record');
 var tracks = {};
 
-var vips = welcome.querySelectorAll('span');
+// var vips = welcome.querySelectorAll('span');
 
-for(var i=0; i<vips.length; i++){
-  colors.start(vips[i], 300);
-}
+// for(var i=0; i<vips.length; i++){
+//   colors.start(vips[i], 300);
+// }
 
 var recording = false;
 
@@ -66,18 +69,18 @@ recordBtn.addEventListener('click', function() {
 })
 
 dragDrop('body', function (files) {
-  welcome.style.display = 'none';
+  // welcome.style.display = 'none';
   newTrackFromFile(files[0]);
 });
 
-welcomeImportBtn.addEventListener('click', function() {
-  document.querySelector('#import').click();
-})
+// welcomeImportBtn.addEventListener('click', function() {
+//   document.querySelector('#import').click();
+// })
 
-welcomeRecordBtn.addEventListener('click', function() {
-  welcomeRecordBtn.querySelector('h4').innerText = 'stop recording';
-  document.querySelector('#record').click();
-})
+// welcomeRecordBtn.addEventListener('click', function() {
+//   welcomeRecordBtn.querySelector('h4').innerText = 'stop recording';
+//   document.querySelector('#record').click();
+// })
 
 importBtn.addEventListener('click', function() {
   document.querySelector('#import').click();
@@ -283,48 +286,55 @@ function newTrackFromFile(file) {
     // alert(file.type + ' files are not supported.');
     return;
   }
-  welcome.style.display = 'none';
-  var containerEl = trackTmp({
-    title: file.name
-  });
+  // welcome.style.display = 'none';
+  var trackEl = trackTmp();
   var id = uniqId();
 
-  workspaceEl.appendChild(containerEl);
+  var controlEl = controlTmp({
+    title: file.name
+  });
+
+  controlSpaceEl.appendChild(controlEl);
+  trackSpaceEl.appendChild(trackEl);
   tracks[id] = new Track({
     title: file.name,
     id: id,
-    containEl: containerEl,
+    trackEl: trackEl,
+    controlEl: controlEl,
     context: audioContext
   });
   tracks[id].emitter.on('tracks:remove', function(ev) {
     tracks[ev.id] = null;
     delete tracks[ev.id];
     this.removeAllListeners();
-    showWelcome();
+    // showWelcome();
   });
   tracks[id].loadFile(file);
   enablePlaybackOpts();
 }
 
 function newTrackFromURL(url) {
-  welcome.style.display = 'none';
-  var containerEl = trackTmp({
+  // welcome.style.display = 'none';
+  var trackEl = trackTmp();
+  var controlEl = controlTmp({
     title: "Recording 1"
   });
   var id = uniqId();
 
-  workspaceEl.appendChild(containerEl);
+  controlSpaceEl.appendChild(controlEl);
+  trackSpaceEl.appendChild(trackEl);
   tracks[id] = new Track({
     title: "Recording 1",
     id: id,
-    containEl: containerEl,
+    trackEl: trackEl,
+    controlEl: controlEl,
     context: audioContext
   });
   tracks[id].emitter.on('tracks:remove', function(ev) {
     tracks[ev.id] = null;
     delete tracks[ev.id];
     this.removeAllListeners();
-    showWelcome();
+    // showWelcome();
   });
   tracks[id].loadURL(url);
   enablePlaybackOpts();

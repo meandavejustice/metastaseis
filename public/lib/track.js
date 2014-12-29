@@ -8,8 +8,8 @@ module.exports = Track;
 
 function Track(opts) {
   this.emitter = new EE();
-  this.containEl = opts.containEl;
-  this.trackEl = this.containEl.querySelector('.track');
+  this.controlEl = opts.controlEl;
+  this.trackEl = opts.trackEl;
   this.active = true;
   this.selecting = true;
   this.context = opts.context;
@@ -39,19 +39,19 @@ function Track(opts) {
   this.initStartTime = 0;
 
   // indicators
-  this.fileIndicator = this.containEl.querySelector('.track p');
-  this.currentTimeEl = this.containEl.querySelector('.cur');
-  this.remainingEl = this.containEl.querySelector('.rem');
-  this.durationEl = this.containEl.querySelector('.dur');
+  this.fileIndicator = this.trackEl.querySelector('.track p');
+  this.currentTimeEl = this.controlEl.querySelector('.cur');
+  this.remainingEl = this.controlEl.querySelector('.rem');
+  this.durationEl = this.controlEl.querySelector('.dur');
 
   // controls
-  this.gainEl = this.containEl.querySelector('.volume input');
+  this.gainEl = this.controlEl.querySelector('.volume input');
 
   // wave elements
-  this.wave = this.containEl.querySelector('.wave canvas');
-  this.progressWave = this.containEl.querySelector('.wave-progress');
-  this.cursor = this.containEl.querySelector('.play-cursor');
-  this.selection = this.containEl.querySelector('.selection');
+  this.wave = this.trackEl.querySelector('.wave canvas');
+  this.progressWave = this.trackEl.querySelector('.wave-progress');
+  this.cursor = this.trackEl.querySelector('.play-cursor');
+  this.selection = this.trackEl.querySelector('.selection');
   this.selectable = [].slice.call(document.querySelectorAll('.selectable'));
 
   colors.start(this.fileIndicator, 300);
@@ -60,7 +60,7 @@ function Track(opts) {
     this.gainNode.gain.value = parseFloat(ev.target.value);
   }.bind(this));
 
-  this.containEl.querySelector('.activate').addEventListener('click', function(ev) {
+  this.controlEl.querySelector('.activate').addEventListener('click', function(ev) {
     var el = ev.target;
 
     if (el.classList.contains('active')) {
@@ -140,7 +140,7 @@ function Track(opts) {
     this.moving = false;
   }.bind(this));
 
-  this.containEl.querySelector('.mute').addEventListener('click', function(ev) {
+  this.controlEl.querySelector('.mute').addEventListener('click', function(ev) {
     var el = ev.target;
 
     if (el.classList.contains('active')) {
@@ -155,7 +155,7 @@ function Track(opts) {
     }
   }.bind(this));
 
-  this.containEl.querySelector('.edit').addEventListener('click', function(ev) {
+  this.controlEl.querySelector('.edit').addEventListener('click', function(ev) {
     var el = ev.target;
     if (el.classList.contains('active')) {
       el.classList.remove('active');
@@ -168,7 +168,7 @@ function Track(opts) {
     }
   }.bind(this));
 
-  this.containEl.querySelector('.collapse').addEventListener('click', function(ev) {
+  this.controlEl.querySelector('.collapse').addEventListener('click', function(ev) {
     var el = ev.target;
     if (el.classList.contains('active')) {
       el.classList.remove('active');
@@ -200,9 +200,10 @@ function Track(opts) {
 
   this.emitter.on('tracks:stop', stopListen.bind(this));
 
-  this.containEl.querySelector('.remove').addEventListener('click', function(ev) {
+  this.controlEl.querySelector('.remove').addEventListener('click', function(ev) {
     this.stop();
-    ev.target.parentElement.parentNode.parentNode.remove();
+    this.controlEl.remove();
+    this.trackEl.remove();
     this.emitter.emit('tracks:remove', {id: this.id});
     this.emitter = null;
   }.bind(this));
@@ -274,6 +275,7 @@ Track.prototype = {
     raf(this.triggerPlaying.bind(this));
   },
   updateVisualProgress: function (percent) {
+    console.log(percent);
     this.progressWave.style.width = percent+"%";
     this.cursor.style.left = percent+"%";
   },
@@ -376,7 +378,9 @@ Track.prototype = {
     reader.readAsArrayBuffer(file);
   },
   adjustWave: function() {
-    var w = this.wave.parentNode.offsetWidth;
+    var w = (this.audiosource.buffer.duration / 5) * 71;
+    console.log(w);
+    // var w = this.wave.parentNode.offsetWidth;
     this.wave.width = w;
     this.progressWave.querySelector('canvas').width = w;
   },
