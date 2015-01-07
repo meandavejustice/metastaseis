@@ -1,6 +1,8 @@
 # meta - staseis
 
 ## Running Locally
+* `cp config.json-dist config.json`
+* fill out config settings in config.json
 * `npm install`
 * `npm start`
 
