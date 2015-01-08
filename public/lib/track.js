@@ -215,6 +215,16 @@ Track.prototype = {
     this.lastPlay = this.context.currentTime;
     this.updateStartOffset();
     this.playTrack(this.startOffset % this.audiosource.buffer.duration);
+    this.setCursorViewInterval();
+  },
+  setCursorViewInterval: function() {
+    if (this.cursorViewInterval) {
+      clearInterval(this.cursorViewInterval);
+    }
+    var self = this;
+    this.cursorViewInterval = setInterval(function() {
+                                self.cursor.scrollIntoViewIfNeeded();
+                              }, 200);
   },
   remove: function() {
 
@@ -249,6 +259,7 @@ Track.prototype = {
     this.lastPlay = 0;
     this.lastPause = 0;
     this.pausedSum = 0;
+    clearInterval(this.cursorViewInterval);
     if (this.audiosource.source) this.audiosource.stop();
   },
   resetProgress: function() {
@@ -274,10 +285,9 @@ Track.prototype = {
     this.playing = true;
     raf(this.triggerPlaying.bind(this));
   },
-  updateVisualProgress: function (percent) {
-    console.log(percent);
-    this.progressWave.style.width = percent+"%";
-    this.cursor.style.left = percent+"%";
+  updateVisualProgress: function (pos) {
+    this.progressWave.style.width = pos+"px";
+    this.cursor.style.left = pos+"px";
   },
   triggerPlaying: function() {
     if (!this.playing) {
@@ -285,15 +295,20 @@ Track.prototype = {
     }
 
     var dur = this.audiosource.buffer.duration;
-    var x = this.currentTimeToPercent(this.context.currentTime);
+    var percent = this.currentTimeToPercent(this.context.currentTime);
 
-    this.updateVisualProgress(x);
+    var currentTime = this.context.currentTime - this.lastPlay;
+
+    // this is the same way we are caculating the width of the waves
+    // to match up to the timeline
+    this.updateVisualProgress((currentTime / 5) * 100);
 
     this.currentTimeEl.textContent = formatTime(this.context.currentTime - this.lastPlay);
     this.remainingEl.textContent = formatTime((this.audiosource.buffer.duration - this.lastPlay) - (this.context.currentTime - this.lastPlay));
 
-    if (parseInt(x) >= 100) {
+    if (parseInt(percent) >= 100) {
       this.playing = !this.playing;
+      clearInterval(this.cursorViewInterval);
       return;
     }
     raf(this.triggerPlaying.bind(this));
@@ -378,7 +393,8 @@ Track.prototype = {
     reader.readAsArrayBuffer(file);
   },
   adjustWave: function() {
-    var w = (this.audiosource.buffer.duration / 5) * 71;
+    // adjust the canvas and containers to fit with the buffer duration
+    var w = (this.audiosource.buffer.duration / 5) * 100;
     console.log(w);
     // var w = this.wave.parentNode.offsetWidth;
     this.wave.width = w;

@@ -199,16 +199,16 @@
 }
 #workspace .track-space .timeline li {
   display: inline-block;
-  width: 65px;
+  width: 100px;
 }
 #workspace .track-space .timeline li:before {
   content: '|';
   position: absolute;
   bottom: -15px;
-  margin-left: 4px;
+  margin-left: 2px;
 }
 #workspace .track-space .timeline li:first-child:before {
-  margin-left: 0px;
+  margin-left: 2px;
 }
 #workspace .track-space .timeline li:nth-child(2):before {
   margin-left: 0px;
@@ -218,7 +218,7 @@
   position: absolute;
   bottom: -14px;
   font-size: 10px;
-  letter-spacing: 5px;
+  letter-spacing: 8px;
   margin-left: 0px;
 }
 #workspace .track-space .timeline li:first-child:after {

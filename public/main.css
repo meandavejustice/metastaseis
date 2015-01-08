@@ -265,57 +265,6 @@ footer a:nth-child(2) {
 .overhead .time-setting:last-child {
   margin-right: 0%;
 }
-.timeline {
-  *zoom: 1;
-  float: left;
-  clear: none;
-  text-align: inherit;
-  width: 82.8333333333333%;
-  margin-left: 0%;
-  margin-right: 3%;
-  position: relative;
-}
-.timeline:before,
-.timeline:after {
-  content: '';
-  display: table;
-}
-.timeline:after {
-  clear: both;
-}
-.timeline:last-child {
-  margin-right: 0%;
-}
-.timeline li {
-  display: inline-block;
-  width: 65px;
-}
-.timeline li:before {
-  content: '|';
-  position: absolute;
-  bottom: -15px;
-  margin-left: 4px;
-}
-.timeline li:first-child:before {
-  margin-left: 0px;
-}
-.timeline li:nth-child(2):before {
-  margin-left: 0px;
-}
-.timeline li:after {
-  content: '| | | |';
-  position: absolute;
-  bottom: -14px;
-  font-size: 10px;
-  letter-spacing: 5px;
-  margin-left: 0px;
-}
-.timeline li:first-child:after {
-  margin-left: 4px;
-}
-.timeline li:nth-child(2):after {
-  margin-left: 5px;
-}
 #workspace {
   zoom: 1;
   padding-top: 70px;
@@ -517,16 +466,16 @@ footer a:nth-child(2) {
 }
 #workspace .track-space .timeline li {
   display: inline-block;
-  width: 65px;
+  width: 100px;
 }
 #workspace .track-space .timeline li:before {
   content: '|';
   position: absolute;
   bottom: -15px;
-  margin-left: 4px;
+  margin-left: 2px;
 }
 #workspace .track-space .timeline li:first-child:before {
-  margin-left: 0px;
+  margin-left: 2px;
 }
 #workspace .track-space .timeline li:nth-child(2):before {
   margin-left: 0px;
@@ -536,7 +485,7 @@ footer a:nth-child(2) {
   position: absolute;
   bottom: -14px;
   font-size: 10px;
-  letter-spacing: 5px;
+  letter-spacing: 8px;
   margin-left: 0px;
 }
 #workspace .track-space .timeline li:first-child:after {
