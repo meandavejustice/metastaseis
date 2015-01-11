@@ -1,9 +1,54 @@
 .welcome
-    width: 600px
-    margin: 0 auto
-    h2, h4
+  width: 600px
+  margin: 40px auto
+
+  li
+    list-style-type: circle
+    list-style-position: inside
+
+  h2, h4
     text-align: center
 
-     a
-       color: #F623F6
-       text-decoration: none
+  a
+    color: #F623F6
+    text-decoration: none
+
+.lrg-btn
+  width: 45%
+  float: left
+  border: 1px solid #000
+  min-height: 80px
+  margin: 13px
+  text-align: center
+  cursor: pointer
+  margin-bottom: 30px
+
+  &:hover
+    box-shadow: 1px 1px
+
+  &.import
+    background: none
+
+    svg:first-child
+      margin-left: 30px
+      margin-bottom: 0
+      margin-top: 0
+
+    svg:nth-child(2)
+      margin-left: -20px
+      margin-bottom: 14px
+      transform: rotate(-30deg)
+
+  &.record
+    h4
+      display: none
+      color: #fff
+
+    svg
+      margin-top: 5px
+
+  h4, p
+    margin: 0
+
+  h4
+    margin-top: 10%

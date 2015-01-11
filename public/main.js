@@ -4,7 +4,7 @@ var AudioContext = require('audiocontext');
 var AudioSource = require('audiosource');
 var FFT = require('audio-fft');
 
-var colors = require('./lib/colors');
+// var colors = require('./lib/colors');
 var editor = require('./lib/edits');
 var recorder = require('./lib/record');
 var Track = require('./lib/track');
@@ -12,7 +12,7 @@ var Track = require('./lib/track');
 var trackTmp = require('../templates/track-tmp');
 var controlTmp = require('../templates/control-tmp');
 
-var emitter = new EE();
+// var emitter = new EE();
 var audioContext = new AudioContext();
 var masterGainNode = audioContext.createGain();
 var uniqId = function() {return Math.random().toString(16).slice(2)};
@@ -25,11 +25,11 @@ var workspaceEl = document.querySelector('#workspace');
 var trackSpaceEl = document.querySelector('.track-space');
 
 // controls
-// var welcome = document.querySelector('.welcome');
-// var welcomeImportBtn = welcome.querySelector('.import');
-// var welcomeRecordBtn = document.querySelector('.record');
+var welcome = document.querySelector('.welcome');
+var welcomeImportBtn = welcome.querySelector('.import');
+var welcomeRecordBtn = document.querySelector('.record');
 var importBtn = document.querySelector('.import');
-var importInput = document.querySelector('#import')
+var importInput = document.querySelector('#import');
 var playBtn = document.querySelector('#play');
 var pauseBtn = document.querySelector('#pause');
 var stopBtn = document.querySelector('#stop');
@@ -43,12 +43,6 @@ var reverseBtn = document.querySelector('#reverse');
 var removeBtn = document.querySelector('#remove');
 var recordBtn = document.querySelector('#record');
 var tracks = {};
-
-// var vips = welcome.querySelectorAll('span');
-
-// for(var i=0; i<vips.length; i++){
-//   colors.start(vips[i], 300);
-// }
 
 var recording = false;
 
@@ -69,18 +63,18 @@ recordBtn.addEventListener('click', function() {
 })
 
 dragDrop('body', function (files) {
-  // welcome.style.display = 'none';
+  welcome.style.display = 'none';
   newTrackFromFile(files[0]);
 });
 
-// welcomeImportBtn.addEventListener('click', function() {
-//   document.querySelector('#import').click();
-// })
+welcomeImportBtn.addEventListener('click', function() {
+  document.querySelector('#import').click();
+})
 
-// welcomeRecordBtn.addEventListener('click', function() {
-//   welcomeRecordBtn.querySelector('h4').innerText = 'stop recording';
-//   document.querySelector('#record').click();
-// })
+welcomeRecordBtn.addEventListener('click', function() {
+  welcomeRecordBtn.querySelector('h4').innerText = 'stop recording';
+  document.querySelector('#record').click();
+})
 
 importBtn.addEventListener('click', function() {
   document.querySelector('#import').click();
@@ -286,7 +280,7 @@ function newTrackFromFile(file) {
     // alert(file.type + ' files are not supported.');
     return;
   }
-  // welcome.style.display = 'none';
+  welcome.style.display = 'none';
   var trackEl = trackTmp();
   var id = uniqId();
 
@@ -314,7 +308,7 @@ function newTrackFromFile(file) {
 }
 
 function newTrackFromURL(url) {
-  // welcome.style.display = 'none';
+  welcome.style.display = 'none';
   var trackEl = trackTmp();
   var controlEl = controlTmp({
     title: "Recording 1"
@@ -334,7 +328,7 @@ function newTrackFromURL(url) {
     tracks[ev.id] = null;
     delete tracks[ev.id];
     this.removeAllListeners();
-    // showWelcome();
+    showWelcome();
   });
   tracks[id].loadURL(url);
   enablePlaybackOpts();

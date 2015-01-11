@@ -1,5 +1,6 @@
 var EE = require('events').EventEmitter;
 var raf = require('raf');
+var timelineManage = require('./timeline');
 var AudioSource = require('audiosource');
 var formatTime = require('./format-time');
 var drawBuffer = require('./draw-buffer');
@@ -303,8 +304,8 @@ Track.prototype = {
     // to match up to the timeline
     this.updateVisualProgress((currentTime / 5) * 100);
 
-    this.currentTimeEl.textContent = formatTime(this.context.currentTime - this.lastPlay);
-    this.remainingEl.textContent = formatTime((this.audiosource.buffer.duration - this.lastPlay) - (this.context.currentTime - this.lastPlay));
+    this.currentTimeEl.textContent = formatTime(this.context.currentTime - this.lastPlay, true);
+    this.remainingEl.textContent = formatTime((this.audiosource.buffer.duration - this.lastPlay) - (this.context.currentTime - this.lastPlay), true);
 
     if (parseInt(percent) >= 100) {
       this.playing = !this.playing;
@@ -349,7 +350,7 @@ Track.prototype = {
              gainNode: self.gainNode
            });
 
-           self.durationEl.textContent = formatTime(buf.duration);
+           self.durationEl.textContent = formatTime(buf.duration, true);
 
            self.audiosource.buffer = buf;
 
@@ -379,7 +380,7 @@ Track.prototype = {
           gainNode: self.gainNode
         });
 
-        self.durationEl.textContent = formatTime(buf.duration);
+        self.durationEl.textContent = formatTime(buf.duration, true);
 
         self.audiosource.buffer = buf;
 
@@ -393,6 +394,7 @@ Track.prototype = {
     reader.readAsArrayBuffer(file);
   },
   adjustWave: function() {
+    timelineManage.update(this.audiosource.buffer.duration);
     // adjust the canvas and containers to fit with the buffer duration
     var w = (this.audiosource.buffer.duration / 5) * 100;
     console.log(w);
@@ -401,6 +403,7 @@ Track.prototype = {
     this.progressWave.querySelector('canvas').width = w;
   },
   drawWaves: function() {
+    timelineManage.update(this.audiosource.buffer.duration);
     var prevLeft = 0;
     if (this.cursor.style.left) {
       prevLeft = parseFloat(this.cursor.style.left.replace('%', ''));

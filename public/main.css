@@ -224,13 +224,64 @@ footer a:nth-child(2) {
 }
 .welcome {
   width: 600px;
-  margin: 0 auto;
-  h2: , h4;
+  margin: 40px auto;
+}
+.welcome li {
+  list-style-type: circle;
+  list-style-position: inside;
+}
+.welcome h2,
+.welcome h4 {
   text-align: center;
 }
 .welcome a {
   color: #f623f6;
   text-decoration: none;
+}
+.lrg-btn {
+  width: 45%;
+  float: left;
+  border: 1px solid #000;
+  min-height: 80px;
+  margin: 13px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 30px;
+}
+.lrg-btn:hover {
+  -webkit-box-shadow: 1px 1px;
+  box-shadow: 1px 1px;
+}
+.lrg-btn.import {
+  background: none;
+}
+.lrg-btn.import svg:first-child {
+  margin-left: 30px;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.lrg-btn.import svg:nth-child(2) {
+  margin-left: -20px;
+  margin-bottom: 14px;
+  -webkit-transform: rotate(-30deg);
+  -moz-transform: rotate(-30deg);
+  -o-transform: rotate(-30deg);
+  -ms-transform: rotate(-30deg);
+  transform: rotate(-30deg);
+}
+.lrg-btn.record h4 {
+  display: none;
+  color: #fff;
+}
+.lrg-btn.record svg {
+  margin-top: 5px;
+}
+.lrg-btn h4,
+.lrg-btn p {
+  margin: 0;
+}
+.lrg-btn h4 {
+  margin-top: 10%;
 }
 .overhead {
   zoom: 1;
@@ -461,7 +512,7 @@ footer a:nth-child(2) {
 }
 #workspace .track-space .timeline {
   position: relative;
-  width: 4000px;
+  width: 1500px;
   padding-left: 2px;
 }
 #workspace .track-space .timeline li {
@@ -472,13 +523,7 @@ footer a:nth-child(2) {
   content: '|';
   position: absolute;
   bottom: -15px;
-  margin-left: 2px;
-}
-#workspace .track-space .timeline li:first-child:before {
-  margin-left: 2px;
-}
-#workspace .track-space .timeline li:nth-child(2):before {
-  margin-left: 0px;
+  margin-left: 18px;
 }
 #workspace .track-space .timeline li:after {
   content: '| | | |';
@@ -498,6 +543,7 @@ footer a:nth-child(2) {
   border-bottom: 1px solid #909090;
   border-right: 1px solid #909090;
   padding: 0;
+  padding-left: 21px;
   background: rgba(189,189,189,0.74);
   height: 300px;
   width: 4000px;
@@ -522,7 +568,7 @@ footer a:nth-child(2) {
   border-left: 1px solid #ffa239;
   height: 100%;
   position: absolute;
-  left: 0px;
+  left: 21px;
 }
 #workspace .track-space .track .paste-cursor {
   width: 1px;
