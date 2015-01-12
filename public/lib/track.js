@@ -288,7 +288,7 @@ Track.prototype = {
   },
   updateVisualProgress: function (pos) {
     this.progressWave.style.width = pos+"px";
-    this.cursor.style.left = pos+"px";
+    this.cursor.style.left = (21+pos)+"px"; // 21 is the padding-left from beginning of track element
   },
   triggerPlaying: function() {
     if (!this.playing) {

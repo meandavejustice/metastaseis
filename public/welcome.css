@@ -2,6 +2,9 @@
   width: 600px;
   margin: 40px auto;
 }
+.welcome p {
+  padding: 10px 0;
+}
 .welcome li {
   list-style-type: circle;
   list-style-position: inside;
