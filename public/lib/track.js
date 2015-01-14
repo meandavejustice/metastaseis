@@ -7,6 +7,7 @@ var AudioSource = require('audiosource');
 var formatTime = require('./format-time');
 var drawBuffer = require('./draw-buffer');
 var colors = require('./colors');
+
 module.exports = Track;
 
 function Track(opts) {
@@ -42,7 +43,8 @@ function Track(opts) {
   this.durationEl = this.controlEl.querySelector('.dur');
 
   // controls
-  this.gainEl = this.controlEl.querySelector('.volume input');
+  this.gainEl = this.controlEl.querySelector('.volume');
+  this.volumeBar = this.gainEl.querySelector('.volume-bar');
 
   // wave elements
   this.wave = this.trackEl.querySelector('.wave canvas');
@@ -53,8 +55,9 @@ function Track(opts) {
 
   colors.start(this.fileIndicator, 300);
 
-  this.gainEl.addEventListener('change', function(ev) {
-    this.gainNode.gain.value = parseFloat(ev.target.value);
+  this.gainEl.addEventListener('click', function(ev) {
+    this.volumeBar.style.width = ev.offsetX + 'px';
+    this.gainNode.gain.value = ev.offsetX / this.gainEl.offsetWidth;
   }.bind(this));
 
   this.controlEl.querySelector('.activate').addEventListener('click', function(ev) {
@@ -220,9 +223,6 @@ Track.prototype = {
     this.cursorViewInterval = setInterval(function() {
                                 self.cursor.scrollIntoViewIfNeeded();
                               }, 200);
-  },
-  remove: function() {
-
   },
   percentFromClick: function(ev) {
     var x = ev.offsetX || ev.layerX;

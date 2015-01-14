@@ -14,8 +14,7 @@ module.exports = function(data) {
 
            h('article.info',
              h('div.volume',
-               h('span.volume-bar'),
-               h('input', {"type": 'range', "min": '0', "max": '1', "step": ".05", "value": ".50", "style": "display: hidden;"})),
+               h('span.volume-bar')),
              h('p', "Current Time: ",
                h('i.cur', "00:00:00")),
              h('p', "Duration: ",

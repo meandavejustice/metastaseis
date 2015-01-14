@@ -4,7 +4,6 @@ var AudioContext = require('audiocontext');
 var AudioSource = require('audiosource');
 var FFT = require('audio-fft');
 
-// var colors = require('./lib/colors');
 var editor = require('./lib/edits');
 var recorder = require('./lib/record');
 var Track = require('./lib/track');
@@ -12,7 +11,6 @@ var Track = require('./lib/track');
 var trackTmp = require('../templates/track-tmp');
 var controlTmp = require('../templates/control-tmp');
 
-// var emitter = new EE();
 var audioContext = new AudioContext();
 var masterGainNode = audioContext.createGain();
 var uniqId = function() {return Math.random().toString(16).slice(2)};
@@ -301,7 +299,7 @@ function newTrackFromFile(file) {
     tracks[ev.id] = null;
     delete tracks[ev.id];
     this.removeAllListeners();
-    // showWelcome();
+    showWelcome();
   });
   tracks[id].loadFile(file);
   enablePlaybackOpts();
