@@ -1,3 +1,5 @@
+// This file is a pit of new york city slarm, edit at your own risk
+
 var EE = require('events').EventEmitter;
 var raf = require('raf');
 var timelineManage = require('./timeline');
@@ -28,16 +30,10 @@ function Track(opts) {
     at: 0
   };
 
-  this.currentTime = this.context.currentTime;
   this.playing = false;
 
   this.startOffset = 0;
   this.lastPlay = 0;
-  this.lastPause = 0;
-  this.pausedSum = 0;
-  this.actualCurrentTime = 0;
-  this.initialPlay = true;
-  this.initStartTime = 0;
 
   // indicators
   this.fileIndicator = this.trackEl.querySelector('.track p');
@@ -212,9 +208,7 @@ function Track(opts) {
 
 Track.prototype = {
   play: function() {
-    this.stop();
     this.lastPlay = this.context.currentTime;
-    this.updateStartOffset();
     this.playTrack(this.startOffset % this.audiosource.buffer.duration);
     this.setCursorViewInterval();
   },
@@ -235,31 +229,17 @@ Track.prototype = {
     return (x / this.wave.offsetWidth) * 100;
   },
   getPercentFromCursor: function() {
-    return parseFloat(this.cursor.style.left.replace('%', ''));
+    return (parseFloat(this.cursor.style.left.replace('px', '')) / this.wave.offsetWidth) * 100;
   },
   getOffsetFromPercent: function(percent) {
     if (percent === 0) return 0;
     var inter = this.audiosource.buffer.duration / 100;
     return inter * percent;
   },
-  updateStartOffset: function() {
-    if (this.cursor.style.left !== '') {
-      var percent = this.getPercentFromCursor();
-      this.startOffset = this.getOffsetFromPercent(percent);
-    } else {
-      this.resetProgress();
-    }
-  },
-  updatePaused: function() {
-    this.pausedSum = this.pausedSum + (this.lastPlay - this.lastPause);
-  },
   stop: function() {
     this.playing = false;
-    this.initialPlay = true;
     this.startOffset = 0;
     this.lastPlay = 0;
-    this.lastPause = 0;
-    this.pausedSum = 0;
     clearInterval(this.cursorViewInterval);
     if (this.audiosource.source) this.audiosource.stop();
   },
@@ -268,7 +248,6 @@ Track.prototype = {
     this.cursor.style.left = "0%";
   },
   pause: function() {
-    this.lastPause = this.context.currentTime;
     this.audiosource.stop();
     this.startOffset += this.context.currentTime - this.lastPlay;
     this.playing = false;
@@ -291,23 +270,20 @@ Track.prototype = {
     this.cursor.style.left = (21+pos)+"px"; // 21 is the padding-left from beginning of track element
   },
   triggerPlaying: function() {
-    if (!this.playing) {
-      return;
-    }
+    if (!this.playing) return;
 
     var dur = this.audiosource.buffer.duration;
-    var percent = this.currentTimeToPercent(this.context.currentTime);
-
-    var currentTime = this.context.currentTime - this.lastPlay;
+    var currentTime = this.context.currentTime - this.lastPlay + this.startOffset;
+    var remainingTime = dur - currentTime;
 
     // this is the same way we are caculating the width of the waves
     // to match up to the timeline
-    this.updateVisualProgress((currentTime / 5) * 100);
+    this.updateVisualProgress(((currentTime) / 5) * 100);
 
-    this.currentTimeEl.textContent = formatTime(this.context.currentTime - this.lastPlay, true);
-    this.remainingEl.textContent = formatTime((this.audiosource.buffer.duration - this.lastPlay) - (this.context.currentTime - this.lastPlay), true);
+    this.currentTimeEl.textContent = formatTime(currentTime, true);
+    this.remainingEl.textContent = formatTime(remainingTime, true);
 
-    if (parseInt(percent) >= 100) {
+    if (remainingTime <= 0) {
       this.playing = !this.playing;
       clearInterval(this.cursorViewInterval);
       return;
@@ -367,7 +343,6 @@ Track.prototype = {
     this.fileIndicator.textContent = 'loading file...';
 
     var self = this;
-    // set status and id3
     var reader = new FileReader();
     reader.onloadend = function(ev) {
       self.fileIndicator.textContent = 'decoding audio data...';
@@ -397,8 +372,6 @@ Track.prototype = {
     timelineManage.update(this.audiosource.buffer.duration);
     // adjust the canvas and containers to fit with the buffer duration
     var w = (this.audiosource.buffer.duration / 5) * 100;
-    console.log(w);
-    // var w = this.wave.parentNode.offsetWidth;
     this.wave.width = w;
     this.progressWave.querySelector('canvas').width = w;
   },
@@ -412,6 +385,5 @@ Track.prototype = {
     drawBuffer(this.wave, this.audiosource.buffer, '#52F6A4');
     drawBuffer(this.progressWave.querySelector('canvas'), this.audiosource.buffer, '#F445F0');
     console.log('waves updated.')
-    // this.updateProgress(prevLeft);
   }
 }
