@@ -1,9 +1,20 @@
 // This file is a pit of new york city slarm, edit at your own risk
 
+
+/*
+
+1) modify all position helper methods to always receive, and return real numbers.
+2) update mousedown & mousemove to reflect these changes.
+3) get back to removing all percentage calculations starting at mouseout event listenr
+
+*/
+
+
 var EE = require('events').EventEmitter;
-var raf = require('raf');
-var timelineManage = require('./timeline');
 var AudioSource = require('audiosource');
+var raf = require('raf');
+
+var timelineManage = require('./timeline');
 var formatTime = require('./format-time');
 var drawBuffer = require('./draw-buffer');
 var colors = require('./colors');
@@ -78,43 +89,39 @@ function Track(opts) {
   this.selectable.forEach(function(wave) {
     wave.addEventListener('click', function(ev) {
       if (this.playing) return;
-      this.cursor.style.left = this.percentFromClick(ev)+"%";
+      this.cursor.style.left = this.positionFromClick(ev)+"px";
     }.bind(self));
-
-    wave.addEventListener('click', function(ev) {
-      if (this.playing) return;
-      this.cursor.style.left = this.percentFromClick(ev)+"%";
-    }.bind(this));
 
     wave.addEventListener('mousedown', function(ev) {
       if (this.playing) return;
       if (!this.moving) {
-        var leftPercent = this.percentFromClick(ev) + '%';
+        var leftPosition = this.positionFromClick(ev) + 'px';
 
         if (this.selecting) {
-          this.selection.style.left = leftPercent;
+          this.selection.style.left = leftPosition;
           this.selection.style.width = 0;
           this.moving = true;
         }
 
-        this.cursor.style.left = leftPercent;
-        this.clipboard.at = this.getOffsetFromPercent(leftPercent.replace('%', ''));
+        this.cursor.style.left = leftPosition;
+        var positionInFloat = parseFloat(leftPosition.replace('px', ''));
+        this.clipboard.at = this.getTimeFromPosition(positionInFloat);
       }
     }.bind(this));
 
     wave.addEventListener('mousemove', function(ev) {
       if (!this.moving || !this.selecting) return;
-      var leftPercent = this.getPercentFromCursor();
-      var rightPercent = this.percentFromClick(ev);
-      var diff = rightPercent - leftPercent;
+      var leftPosition = this.getPositionFromCursor();
+      var rightPosition = this.positionFromClick(ev);
+      var diff = rightPosition - leftPosition;
 
       if (diff > 0) {
-        diff += '%';
+        diff += 'px';
       } else {
-        this.cursor.style.left = rightPercent +'%';
-        diff = leftPercent - rightPercent;
+        this.cursor.style.left = rightPosition +'px';
+        diff = leftPosition - rightPosition
         if (diff > 0) {
-          diff +='%';
+          diff +='px';
         } else diff = 0;
       }
 
@@ -122,19 +129,19 @@ function Track(opts) {
     }.bind(this));
 
   }, this);
-
-  // this.selection.addEventListener('mouseout', function(ev) {
-  //   var leftPercent = this.getPercentFromCursor();
-  //   var rightPercent = this.percentFromClick(ev);
-  //   this.clipboard.start = this.getOffsetFromPercent(leftPercent);
-  //   this.clipboard.end = this.getOffsetFromPercent(rightPercent);
-  //   this.moving = false;
-  // }.bind(this));
+  // eyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+  this.selection.addEventListener('mouseout', function(ev) {
+    var leftPosition = this.getPositionFromCursor();
+    var rightPosition = this.positionFromClick(ev);
+    this.clipboard.start = this.getOffsetFromPercent(leftPosition);
+    this.clipboard.end = this.getOffsetFromPercent(rightPosition);
+    this.moving = false;
+  }.bind(this));
 
   this.selection.addEventListener('mouseup', function(ev) {
     if (!this.selecting) return;
-    var leftPercent = this.getPercentFromCursor();
-    var rightPercent = this.percentFromClick(ev);
+    var leftPercent = this.getPositionFromCursor();
+    var rightPercent = this.positionFromClick(ev);
     this.clipboard.start = this.getOffsetFromPercent(leftPercent);
     this.clipboard.end = this.clipboard.start + this.getOffsetFromPercent(rightPercent);
     this.moving = false;
@@ -224,12 +231,15 @@ Track.prototype = {
                                 self.cursor.scrollIntoViewIfNeeded();
                               }, 200);
   },
-  percentFromClick: function(ev) {
+  positionFromClick: function(ev) {
     var x = ev.offsetX || ev.layerX;
-    return (x / this.wave.offsetWidth) * 100;
+    return x + 21;
   },
-  getPercentFromCursor: function() {
-    return (parseFloat(this.cursor.style.left.replace('px', '')) / this.wave.offsetWidth) * 100;
+  getPositionFromCursor: function() {
+    return this.cursor.style.left;
+  },
+  getTimeFromPosition: function(position) {
+    return (position / 100) * 5;
   },
   getOffsetFromPercent: function(percent) {
     if (percent === 0) return 0;
