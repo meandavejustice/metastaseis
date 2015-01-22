@@ -59,7 +59,7 @@ function Track(opts) {
   this.progressWave = this.trackEl.querySelector('.wave-progress');
   this.cursor = this.trackEl.querySelector('.play-cursor');
   this.selection = this.trackEl.querySelector('.selection');
-  this.selectable = [].slice.call(document.querySelectorAll('.selectable'));
+  this.selectable = [].slice.call(this.trackEl.querySelectorAll('.selectable'));
 
   // colors.start(this.fileIndicator, 300);
 
@@ -83,50 +83,10 @@ function Track(opts) {
   }.bind(this));
 
   this.selectable.forEach(function(wave) {
-    wave.addEventListener('click', function(ev) {
-      if (this.playing) return;
-      this.cursor.style.left = this.positionFromClick(ev)+"px";
-    }.bind(this));
-
-    wave.addEventListener('mousedown', function(ev) {
-      if (this.playing) return;
-      if (!this.moving) {
-        var leftPosition = this.positionFromClick(ev);
-        if (this.selecting) {
-          this.selection.style.left = leftPosition + 'px';
-          this.selection.style.width = 0;
-          this.moving = true;
-        }
-
-        this.cursor.style.left = leftPosition + 'px';
-      }
-    }.bind(this));
-
-    wave.addEventListener('mousemove', function(ev) {
-      if (!this.moving || !this.selecting) return;
-      var leftPosition = this.getPositionFromCursor();
-      var rightPosition = this.positionFromClick(ev);
-      var diff = rightPosition - leftPosition;
-
-      if (diff <= 0) {
-        diff = leftPosition - rightPosition;
-        this.cursor.style.left = rightPosition + 'px';
-        this.selection.style.left = rightPosition + 'px';
-      }
-
-      console.log(diff);
-      this.selection.style.width = diff +'px';
-    }.bind(this));
-
+    wave.addEventListener('click', this.initSelection.bind(this));
+    wave.addEventListener('mousedown', this.startSelection.bind(this));
+    wave.addEventListener('mousemove', this.updateSelection.bind(this));
   }, this);
-  // this.selection.addEventListener('mouseout', function(ev) {
-  //   console.log('mouseout:::', ev)
-  //   var leftPosition = this.getPositionFromCursor();
-  //   var rightPosition = this.positionFromClick(ev);
-  //   this.clipboard.start = this.getTimeFromPosition(leftPosition);
-  //   this.clipboard.end = this.getTimeFromPosition(rightPosition);
-  //   this.moving = false;
-  // }.bind(this));
 
   this.selection.addEventListener('mouseup', function(ev) {
     if (!this.selecting) return;
@@ -207,6 +167,37 @@ function Track(opts) {
 }
 
 Track.prototype = {
+  updateSelection: function(ev) {
+    if (!this.moving || !this.selecting) return;
+    var leftPosition = this.getPositionFromCursor();
+    var rightPosition = this.positionFromClick(ev);
+    var diff = rightPosition - leftPosition;
+
+    if (diff <= 0) {
+      diff = leftPosition - rightPosition;
+      this.cursor.style.left = rightPosition + 'px';
+      this.selection.style.left = rightPosition + 'px';
+    }
+
+    this.selection.style.width = diff +'px';
+  },
+  startSelection: function(ev) {
+    if (this.playing) return;
+    if (!this.moving) {
+      var leftPosition = this.positionFromClick(ev);
+      if (this.selecting) {
+        this.selection.style.left = leftPosition + 'px';
+        this.selection.style.width = 0;
+        this.moving = true;
+      }
+
+      this.cursor.style.left = leftPosition + 'px';
+    }
+  },
+  initSelection: function(ev) {
+    if (this.playing) return;
+    this.cursor.style.left = this.positionFromClick(ev)+"px";
+  },
   play: function() {
     this.lastPlay = this.context.currentTime;
     this.playTrack(this.startOffset % this.audiosource.buffer.duration);

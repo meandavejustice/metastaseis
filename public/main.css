@@ -502,7 +502,7 @@ footer a:nth-child(2) {
 #workspace .track-space .timeline-contain {
   position: fixed;
   top: 51px;
-  z-index: 3;
+  z-index: 4;
   height: 50px;
   background: #fff;
   padding-top: 20px;
