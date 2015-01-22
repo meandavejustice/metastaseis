@@ -28,8 +28,6 @@ function Track(opts) {
   this.id = opts.id;
   this.title = opts.title;
 
-  var blahblah = 'whatsthedeal';
-
   if (opts.gainNode) {
     this.gainNode = opts.gainNode;
   }
@@ -50,6 +48,10 @@ function Track(opts) {
   this.remainingEl = this.controlEl.querySelector('.rem');
   this.durationEl = this.controlEl.querySelector('.dur');
 
+  // center file indicator
+  var trackSpaceWidth = document.querySelector('.track-space').offsetWidth;
+  this.fileIndicator.style.width = trackSpaceWidth + 'px';
+
   // controls
   this.gainEl = this.controlEl.querySelector('.volume');
   this.volumeBar = this.gainEl.querySelector('.volume-bar');
@@ -61,7 +63,7 @@ function Track(opts) {
   this.selection = this.trackEl.querySelector('.selection');
   this.selectable = [].slice.call(this.trackEl.querySelectorAll('.selectable'));
 
-  // colors.start(this.fileIndicator, 300);
+  colors.start(this.fileIndicator, 300);
 
   this.gainEl.addEventListener('click', function(ev) {
     this.volumeBar.style.width = ev.offsetX + 'px';
@@ -298,25 +300,26 @@ Track.prototype = {
         req.responseType = 'arraybuffer';
     var self = this;
     req.onloadend = function(ev) {
-           self.fileIndicator.textContent = 'decoding audio data...';
+      self.fileIndicator.textContent = 'decoding audio data...';
 
-           self.context.decodeAudioData(req.response, function(buf) {
-           self.fileIndicator.textContent = 'rendering wave...';
+      self.context.decodeAudioData(req.response, function(buf) {
+        self.fileIndicator.textContent = 'rendering wave...';
 
-           self.gainNode = self.context.createGain();
-           self.audiosource = new AudioSource(self.context, {
-             gainNode: self.gainNode
-           });
+        self.gainNode = self.context.createGain();
+        self.audiosource = new AudioSource(self.context, {
+          gainNode: self.gainNode
+        });
 
-           self.durationEl.textContent = formatTime(buf.duration, true);
+        self.durationEl.textContent = formatTime(buf.duration, true);
+        self.remainingEl.textContent = formatTime(buf.duration, true);
 
-           self.audiosource.buffer = buf;
+        self.audiosource.buffer = buf;
 
-           self.adjustWave();
-           drawBuffer(self.wave, buf, '#52F6A4');
-           drawBuffer(self.progressWave.querySelector('canvas'), buf, '#F445F0');
-           self.fileIndicator.remove();
-         });
+        self.adjustWave();
+        drawBuffer(self.wave, buf, '#52F6A4');
+        drawBuffer(self.progressWave.querySelector('canvas'), buf, '#F445F0');
+        self.fileIndicator.remove();
+      });
     };
 
     req.send();
@@ -338,6 +341,7 @@ Track.prototype = {
         });
 
         self.durationEl.textContent = formatTime(buf.duration, true);
+        self.remainingEl.textContent = formatTime(buf.duration, true);
 
         self.audiosource.buffer = buf;
 
@@ -366,6 +370,7 @@ Track.prototype = {
     this.resetVisual();
     drawBuffer(this.wave, this.audiosource.buffer, '#52F6A4');
     drawBuffer(this.progressWave.querySelector('canvas'), this.audiosource.buffer, '#F445F0');
+    colors.end();
     console.log('waves updated.')
   }
 }
