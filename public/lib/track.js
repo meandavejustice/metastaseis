@@ -2,11 +2,7 @@
 
 
 /*
-
-1) modify all position helper methods to always receive, and return real numbers.
-2) update mousedown & mousemove to reflect these changes.
-3) get back to removing all percentage calculations starting at mouseout event listenr
-
+4) make sure loading and wave rendering code is DRY
 */
 
 
@@ -32,14 +28,15 @@ function Track(opts) {
   this.id = opts.id;
   this.title = opts.title;
 
+  var blahblah = 'whatsthedeal';
+
   if (opts.gainNode) {
     this.gainNode = opts.gainNode;
   }
 
   this.clipboard = {
     start: 0,
-    end: 0,
-    at: 0
+    end: 0
   };
 
   this.playing = false;
@@ -64,7 +61,7 @@ function Track(opts) {
   this.selection = this.trackEl.querySelector('.selection');
   this.selectable = [].slice.call(document.querySelectorAll('.selectable'));
 
-  colors.start(this.fileIndicator, 300);
+  // colors.start(this.fileIndicator, 300);
 
   this.gainEl.addEventListener('click', function(ev) {
     this.volumeBar.style.width = ev.offsetX + 'px';
@@ -85,27 +82,23 @@ function Track(opts) {
     }
   }.bind(this));
 
-  var self = this;
   this.selectable.forEach(function(wave) {
     wave.addEventListener('click', function(ev) {
       if (this.playing) return;
       this.cursor.style.left = this.positionFromClick(ev)+"px";
-    }.bind(self));
+    }.bind(this));
 
     wave.addEventListener('mousedown', function(ev) {
       if (this.playing) return;
       if (!this.moving) {
-        var leftPosition = this.positionFromClick(ev) + 'px';
-
+        var leftPosition = this.positionFromClick(ev);
         if (this.selecting) {
-          this.selection.style.left = leftPosition;
+          this.selection.style.left = leftPosition + 'px';
           this.selection.style.width = 0;
           this.moving = true;
         }
 
-        this.cursor.style.left = leftPosition;
-        var positionInFloat = parseFloat(leftPosition.replace('px', ''));
-        this.clipboard.at = this.getTimeFromPosition(positionInFloat);
+        this.cursor.style.left = leftPosition + 'px';
       }
     }.bind(this));
 
@@ -115,35 +108,32 @@ function Track(opts) {
       var rightPosition = this.positionFromClick(ev);
       var diff = rightPosition - leftPosition;
 
-      if (diff > 0) {
-        diff += 'px';
-      } else {
-        this.cursor.style.left = rightPosition +'px';
-        diff = leftPosition - rightPosition
-        if (diff > 0) {
-          diff +='px';
-        } else diff = 0;
+      if (diff <= 0) {
+        diff = leftPosition - rightPosition;
+        this.cursor.style.left = rightPosition + 'px';
+        this.selection.style.left = rightPosition + 'px';
       }
 
-      this.selection.style.width = diff;
+      console.log(diff);
+      this.selection.style.width = diff +'px';
     }.bind(this));
 
   }, this);
-  // eyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
-  this.selection.addEventListener('mouseout', function(ev) {
-    var leftPosition = this.getPositionFromCursor();
-    var rightPosition = this.positionFromClick(ev);
-    this.clipboard.start = this.getOffsetFromPercent(leftPosition);
-    this.clipboard.end = this.getOffsetFromPercent(rightPosition);
-    this.moving = false;
-  }.bind(this));
+  // this.selection.addEventListener('mouseout', function(ev) {
+  //   console.log('mouseout:::', ev)
+  //   var leftPosition = this.getPositionFromCursor();
+  //   var rightPosition = this.positionFromClick(ev);
+  //   this.clipboard.start = this.getTimeFromPosition(leftPosition);
+  //   this.clipboard.end = this.getTimeFromPosition(rightPosition);
+  //   this.moving = false;
+  // }.bind(this));
 
   this.selection.addEventListener('mouseup', function(ev) {
     if (!this.selecting) return;
-    var leftPercent = this.getPositionFromCursor();
-    var rightPercent = this.positionFromClick(ev);
-    this.clipboard.start = this.getOffsetFromPercent(leftPercent);
-    this.clipboard.end = this.clipboard.start + this.getOffsetFromPercent(rightPercent);
+    var leftPercent = parseFloat(this.selection.style.left.replace('px', ''));
+    var rightPercent = leftPercent + parseFloat(this.selection.style.width.replace('px', ''));
+    this.clipboard.start = this.getTimeFromPosition(leftPercent);
+    this.clipboard.end = this.getTimeFromPosition(rightPercent);
     this.moving = false;
   }.bind(this));
 
@@ -236,15 +226,10 @@ Track.prototype = {
     return x + 21;
   },
   getPositionFromCursor: function() {
-    return this.cursor.style.left;
+    return parseFloat(this.cursor.style.left.replace('px', ''));
   },
   getTimeFromPosition: function(position) {
     return (position / 100) * 5;
-  },
-  getOffsetFromPercent: function(percent) {
-    if (percent === 0) return 0;
-    var inter = this.audiosource.buffer.duration / 100;
-    return inter * percent;
   },
   stop: function() {
     this.playing = false;
@@ -254,8 +239,8 @@ Track.prototype = {
     if (this.audiosource.source) this.audiosource.stop();
   },
   resetProgress: function() {
-    this.progressWave.style.width = "0%";
-    this.cursor.style.left = "0%";
+    this.progressWave.style.width = "0px";
+    this.cursor.style.left = "0px";
   },
   pause: function() {
     this.audiosource.stop();
@@ -264,10 +249,6 @@ Track.prototype = {
   },
   skipForward: function() {},
   skipBackward: function() {},
-  updateProgress: function(percent) {
-    this.progressWave.style.width = percent+"%";
-    this.cursor.style.left = percent+"%";
-  },
   playTrack: function(offset, stopOffset) {
     if (this.playing) this.audiosource.stop();
     this.audiosource.play(0, offset);
@@ -389,7 +370,7 @@ Track.prototype = {
     timelineManage.update(this.audiosource.buffer.duration);
     var prevLeft = 0;
     if (this.cursor.style.left) {
-      prevLeft = parseFloat(this.cursor.style.left.replace('%', ''));
+      prevLeft = parseFloat(this.cursor.style.left.replace('px', ''));
     }
     this.resetVisual();
     drawBuffer(this.wave, this.audiosource.buffer, '#52F6A4');
