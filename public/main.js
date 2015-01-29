@@ -22,6 +22,11 @@ var controlSpaceEl = document.querySelector('.control-space');
 var workspaceEl = document.querySelector('#workspace');
 var trackSpaceEl = document.querySelector('.track-space');
 
+var mergeBuffers = require('merge-audio-buffers');
+var encoder = require('encode-wav');
+
+var mergeButton = document.querySelector('.merge');
+
 // controls
 var welcome = document.querySelector('.welcome');
 var welcomeImportBtn = welcome.querySelector('.import');
@@ -43,6 +48,37 @@ var recordBtn = document.querySelector('#record');
 var tracks = {};
 
 var recording = false;
+
+mergeButton.addEventListener('click', function() {
+  var fullTracks = [];
+
+  Object.keys(tracks).forEach(function(key) {
+    fullTracks.push(tracks[key].audiosource.buffer);
+  });
+
+  var merged = mergeBuffers(fullTracks, audioContext);
+  newTrackFromAudioBuffer(merged);
+  encoder.encodeWAV([merged.getChannelData(0), merged.getChannelData(1)],
+            merged.sampleRate,
+            function(blob) {
+              console.log('wav encoding complete: ', blob );
+              if (blob) {
+                var url = URL.createObjectURL(blob);
+                var li = document.createElement('li');
+                var au = document.createElement('audio');
+                var hf = document.createElement('a');
+
+                au.controls = true;
+                au.src = url;
+                hf.href = url;
+                hf.download = new Date().toISOString() + '.wav';
+                hf.innerHTML = hf.download;
+                li.appendChild(au);
+                li.appendChild(hf);
+                document.body.appendChild(li);
+              }
+            })
+})
 
 recordBtn.addEventListener('click', function() {
   if (!recording) {
@@ -248,16 +284,23 @@ function getActiveTrack() {
 }
 
 function newTrackFromAudioBuffer(audioBuffer) {
-  var containerEl = trackTmp({
-    title: "Track 1"
+  welcome.style.display = 'none';
+  var trackEl = trackTmp();
+  var controlEl = controlTmp({
+    title: "Recording 1"
   });
   var id = uniqId();
-  workspaceEl.appendChild(containerEl);
+
+  controlSpaceEl.appendChild(controlEl);
+  trackSpaceEl.appendChild(trackEl);
+
   tracks[id] = new Track({
+    title: "Recording 1",
     id: id,
-    containEl: containerEl,
-    context: audioContext,
-    gainNode: audioContext.createGain()
+    trackEl: trackEl,
+    controlEl: controlEl,
+    gainNode: audioContext.createGain(),
+    context: audioContext
   });
 
   tracks[id].audiosource = new AudioSource(audioContext, {
@@ -269,6 +312,15 @@ function newTrackFromAudioBuffer(audioBuffer) {
   tracks[id].adjustWave();
   tracks[id].drawWaves();
   tracks[id].fileIndicator.remove();
+
+  tracks[id].emitter.on('tracks:remove', function(ev) {
+    tracks[ev.id] = null;
+    delete tracks[ev.id];
+    this.removeAllListeners();
+    showWelcome();
+  });
+
+  enablePlaybackOpts();
 }
 
 function newTrackFromFile(file) {

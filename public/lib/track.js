@@ -5,14 +5,15 @@
 4) make sure loading and wave rendering code is DRY
 */
 
-
-var EE = require('events').EventEmitter;
-var AudioSource = require('audiosource');
 var raf = require('raf');
+var EE = require('events').EventEmitter;
+var drawBuffer = require('draw-wave');
+var encoder = require('encode-wav');
+var AudioSource = require('audiosource');
 
+var forceDownload = require('./force-download');
 var timelineManage = require('./timeline');
 var formatTime = require('./format-time');
-var drawBuffer = require('./draw-buffer');
 var colors = require('./colors');
 
 module.exports = Track;
@@ -56,6 +57,7 @@ function Track(opts) {
   this.gainEl = this.controlEl.querySelector('.volume');
   this.volumeBar = this.gainEl.querySelector('.volume-bar');
 
+
   // wave elements
   this.wave = this.trackEl.querySelector('.wave canvas');
   this.progressWave = this.trackEl.querySelector('.wave-progress');
@@ -97,6 +99,15 @@ function Track(opts) {
     this.clipboard.start = this.getTimeFromPosition(leftPercent);
     this.clipboard.end = this.getTimeFromPosition(rightPercent);
     this.moving = false;
+  }.bind(this));
+
+  this.controlEl.querySelector('.export').addEventListener('click', function() {
+    encoder.encodeWAV([this.audiosource.buffer.getChannelData(0), this.audiosource.buffer.getChannelData(1)],
+            this.audiosource.buffer.sampleRate,
+            function(blob) {
+              if (blob) forceDownload(URL.createObjectURL(blob));
+            })
+
   }.bind(this));
 
   this.controlEl.querySelector('.mute').addEventListener('click', function(ev) {

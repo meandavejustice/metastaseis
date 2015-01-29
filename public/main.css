@@ -114,7 +114,7 @@ body > header {
   margin-bottom: 5px;
   position: fixed;
   top: 0;
-  z-index: 4;
+  z-index: 5;
 }
 body > header button {
   width: 70px;
