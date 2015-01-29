@@ -1,4 +1,3 @@
-var EE = require('events').EventEmitter;
 var dragDrop = require('drag-drop');
 var AudioContext = require('audiocontext');
 var AudioSource = require('audiosource');
@@ -12,14 +11,12 @@ var trackTmp = require('../templates/track-tmp');
 var controlTmp = require('../templates/control-tmp');
 
 var audioContext = new AudioContext();
-var masterGainNode = audioContext.createGain();
-var uniqId = function() {return Math.random().toString(16).slice(2)};
+var uniqId = function() {return Math.random().toString(16).slice(2);};
 
 var drawer = document.querySelector('.drawer');
 var fft = new FFT(audioContext, {canvas: drawer.querySelector('#fft')});
 
 var controlSpaceEl = document.querySelector('.control-space');
-var workspaceEl = document.querySelector('#workspace');
 var trackSpaceEl = document.querySelector('.track-space');
 
 var mergeBuffers = require('merge-audio-buffers');

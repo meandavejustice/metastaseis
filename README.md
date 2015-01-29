@@ -1,19 +1,22 @@
 # meta - staseis
 (for lack of a better name)
 
+## Running Locally
+* `npm install`
+* `npm start`
+
 ## about
 meta-staesis is an in-browser audio wave editor. It aims to be usable for basic editing,
-taking many queues from [audacity](). One of the goals is to create an environment that
+taking many queues from [audacity](http://audacity.sourceforge.net/). One of the goals is to create an environment that
 is very easy to use and get editting quickly. Another would be to take advantage of
 tools we already have available on the open web. Syncing data, publishing to other
 audio hosting services(ex: soundcloud) and availablity.
 
-The interesting technologies used in this project include the [Web Audio API]()
-and [Web workers]().
+The interesting technologies used in this project include the [Web Audio API](http://www.w3.org/2011/audio/wiki/Main_Page)
+and [Web workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/basic_usage).
 
-
-
-
+## Contributing
+There are a good amount of [issues](https://github.com/meandavejustice/metastaseis/issues) for getting started here.
 
 ## Attribute
 

@@ -1,7 +1,6 @@
 var http = require("http");
 var st = require("st");
 var Router = require("routes-router");
-var util = require('util');
 
 var app = Router()
 var port = 8000;

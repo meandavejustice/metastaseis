@@ -29,8 +29,8 @@
     </header>
 
     <div class="drawer" style="position: absolute;">
-        <canvas id="fft" width="285" height="150"></canvas>
-      </div>
+      <canvas id="fft" width="285" height="150"></canvas>
+    </div>
 
     <div id="workspace" class="dragdealer">
       <div class="project-space">
@@ -183,42 +183,42 @@
               <li>seeking</li>
               <li>drag file uploads</li>
               <li>recording</li>
+              <li>export as WAV</li>
             </ul>
 
             <p>coming soon...</p>
             <ul>
-              <li>export as WAV & Mp3</li>
+              <li>export as Mp3</li>
               <li>apply a limited # of effects to waves (maybe)</li>
               <li>skip forward and backward</li>
               <li>a jazzier ui for editing (more drag n drop)</li>
               <li>proper paste functionality</li>
               <li>upload to soundcloud</li>
             </ul>
-
           </div>
           <div class="clear"></div>
         </div>          
       </div> <!-- end track-space -->
-      </div> <!-- end project-space -->
+    </div> <!-- end project-space -->
 
-      <footer>
-        <a href="https://github.com/meandavejustice/metastaseis">contribute</a>
-        <a href="mailto:davejustishh@gmail.com">feedback</a>
-      </footer>
-      <script type="text/javascript" src="recorder.js"></script>
-      <script type="text/javascript" src="bundle.js"></script>
+    <footer>
+      <a href="https://github.com/meandavejustice/metastaseis">contribute</a>
+      <a href="mailto:davejustishh@gmail.com">feedback</a>
+    </footer>
+    <script type="text/javascript" src="recorder.js"></script>
+    <script type="text/javascript" src="bundle.js"></script>
 
-      <script>
-        var trackSpace = document.querySelector('.track-space');
-        var timelineContainer = document.querySelector('.timeline-contain');
+    <script>
+      var trackSpace = document.querySelector('.track-space');
+      var timelineContainer = document.querySelector('.timeline-contain');
 
-        timelineContainer.addEventListener('scroll', function(ev) {
-          trackSpace.scrollLeft = timelineContainer.scrollLeft;
-        });
+      timelineContainer.addEventListener('scroll', function(ev) {
+      trackSpace.scrollLeft = timelineContainer.scrollLeft;
+      });
 
-        trackSpace.addEventListener('scroll', function(ev) {
-          timelineContainer.scrollLeft = trackSpace.scrollLeft;
-        });
-      </script>
+      trackSpace.addEventListener('scroll', function(ev) {
+      timelineContainer.scrollLeft = trackSpace.scrollLeft;
+      });
+    </script>
   </body>
 </html>
