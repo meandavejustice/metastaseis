@@ -1,0 +1,59 @@
+.welcome {
+  width: 600px;
+  margin: 40px auto;
+}
+.welcome p {
+  padding: 10px 0;
+}
+.welcome li {
+  list-style-type: circle;
+  list-style-position: inside;
+}
+.welcome h2,
+.welcome h4 {
+  text-align: center;
+}
+.welcome a {
+  color: #f623f6;
+  text-decoration: none;
+}
+.lrg-btn {
+  width: 45%;
+  float: left;
+  border: 1px solid #000;
+  min-height: 80px;
+  margin: 13px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 30px;
+}
+.lrg-btn:hover {
+  box-shadow: 1px 1px;
+}
+.lrg-btn.import {
+  background: none;
+}
+.lrg-btn.import svg:first-child {
+  margin-left: 30px;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.lrg-btn.import svg:nth-child(2) {
+  margin-left: -20px;
+  margin-bottom: 14px;
+  transform: rotate(-30deg);
+}
+.lrg-btn.record h4 {
+  display: none;
+  color: #fff;
+}
+.lrg-btn.record svg {
+  margin-top: 5px;
+}
+.lrg-btn h4,
+.lrg-btn p {
+  margin: 0;
+}
+.lrg-btn h4 {
+  margin-top: 10%;
+}

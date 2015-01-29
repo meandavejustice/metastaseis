@@ -1,0 +1,312 @@
+#workspace {
+  zoom: 1;
+  padding-top: 70px;
+  padding-left: 10px;
+  margin-bottom: 12px;
+}
+#workspace:before,
+#workspace:after {
+  content: "";
+  display: table;
+}
+#workspace:after {
+  clear: both;
+}
+#workspace .project-space {
+  zoom: 1;
+  width: 100%;
+  height: 100%;
+}
+#workspace .project-space:before,
+#workspace .project-space:after {
+  content: "";
+  display: table;
+}
+#workspace .project-space:after {
+  clear: both;
+}
+#workspace .control-space {
+  float: left;
+  clear: none;
+  text-align: inherit;
+  width: 16.666667%;
+  margin-left: 0%;
+  margin-right: 0.5%;
+  padding-bottom: 28px;
+}
+#workspace .control-space .time-setting {
+  padding: 0px 15px 10px;
+  text-align: center;
+}
+#workspace .control-space .time-setting small {
+  color: #797979;
+}
+#workspace .control-space .time-setting h1 {
+  font-size: 25px;
+  text-shadow: 2px 2px 2px #ffb02e;
+  color: #525252;
+}
+#workspace .control-space .control {
+  background: #f6f6f6;
+  height: 300px;
+  border: 1px solid #c7c7c7;
+  border-top: 0px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+#workspace .control-space .control .info {
+  padding: 10px;
+}
+#workspace .control-space .control .info p {
+  padding: 3px;
+}
+#workspace .control-space .control header {
+  padding: 20px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  background: -webkit-linear-gradient(top, #47ffce, #7dff66);
+  background: -moz-linear-gradient(top, #47ffce, #7dff66);
+  background: -o-linear-gradient(top, #47ffce, #7dff66);
+  background: -ms-linear-gradient(top, #47ffce, #7dff66);
+  background: linear-gradient(to bottom, #47ffce, #7dff66);
+  color: #2f2f2f;
+}
+#workspace .control-space .control header p {
+  white-space: nowrap;
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+}
+#workspace .control-space .control .actions {
+  *zoom: 1;
+  width: auto;
+  max-width: 90%;
+  float: none;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 0;
+  padding-right: 0;
+  margin: 10px 25px 0px;
+}
+#workspace .control-space .control .actions:before,
+#workspace .control-space .control .actions:after {
+  content: '';
+  display: table;
+}
+#workspace .control-space .control .actions:after {
+  clear: both;
+}
+#workspace .control-space .control .actions li {
+  display: inline-block;
+  list-style: none;
+  border: 1px solid #000;
+  margin: 0;
+  float: left;
+  width: 50px;
+  height: 50px;
+  background-position: 50%;
+  -webkit-background-size: 75%;
+  -moz-background-size: 75%;
+  background-size: 75%;
+  background-repeat: no-repeat;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  margin: 1px;
+}
+#workspace .control-space .control .actions li:hover {
+  -webkit-box-shadow: 1px 1px;
+  box-shadow: 1px 1px;
+}
+#workspace .control-space .control .actions li.active {
+  -webkit-box-shadow: inset 1px 1px 5px;
+  box-shadow: inset 1px 1px 5px;
+}
+#workspace .control-space .control .actions li.active:hover {
+  -webkit-box-shadow: inset 1px 1px 5px;
+  box-shadow: inset 1px 1px 5px;
+}
+#workspace .control-space .control .actions li.edit {
+  background-image: url("img/edit.svg");
+}
+#workspace .control-space .control .actions li.remove {
+  background-image: url("img/remove2.svg");
+}
+#workspace .control-space .control .actions li.activate {
+  background-image: url("img/activate.svg");
+}
+#workspace .control-space .control .actions li.mute {
+  background-image: url("img/mute.svg");
+  -webkit-background-size: 50%;
+  -moz-background-size: 50%;
+  background-size: 50%;
+}
+#workspace .control-space .control .actions li.collapse {
+  background-image: url("img/collapse.svg");
+}
+#workspace .control-space .control .actions li.export {
+  background-image: url("img/export2.svg");
+  -webkit-background-size: 50%;
+  -moz-background-size: 50%;
+  background-size: 50%;
+}
+#workspace .control-space .time-setting + .control {
+  border-top: 1px !important;
+}
+#workspace .track-space {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  padding-top: 50px;
+  -webkit-box-shadow: inset 6px 6px 7px #000;
+  box-shadow: inset 6px 6px 7px #000;
+  *zoom: 1;
+  float: left;
+  clear: none;
+  text-align: inherit;
+  width: 82.8333333333333%;
+  margin-left: 0%;
+  margin-right: 3%;
+}
+#workspace .track-space:before,
+#workspace .track-space:after {
+  content: '';
+  display: table;
+}
+#workspace .track-space:after {
+  clear: both;
+}
+#workspace .track-space:last-child {
+  margin-right: 0%;
+}
+#workspace .track-space .timeline-contain {
+  position: fixed;
+  top: 51px;
+  z-index: 4;
+  height: 50px;
+  background: #fff;
+  padding-top: 20px;
+  overflow-x: scroll;
+  width: 82.5%;
+  overflow-y: hidden;
+  border-right: 12px solid #fff;
+  -webkit-box-shadow: 5px 6px 9px 0px rgba(0,0,0,0.41);
+  box-shadow: 5px 6px 9px 0px rgba(0,0,0,0.41);
+}
+#workspace .track-space .timeline {
+  position: relative;
+  width: 1500px;
+  padding-left: 2px;
+}
+#workspace .track-space .timeline li {
+  display: inline-block;
+  width: 100px;
+}
+#workspace .track-space .timeline li:before {
+  content: '|';
+  position: absolute;
+  bottom: -15px;
+  margin-left: 18px;
+}
+#workspace .track-space .timeline li:after {
+  content: '| | | |';
+  position: absolute;
+  bottom: -14px;
+  font-size: 10px;
+  letter-spacing: 8px;
+  margin-left: 0px;
+}
+#workspace .track-space .timeline li:first-child:after {
+  margin-left: 4px;
+}
+#workspace .track-space .timeline li:nth-child(2):after {
+  margin-left: 5px;
+}
+#workspace .track-space .track {
+  border-bottom: 1px solid #909090;
+  border-right: 1px solid #909090;
+  padding: 0;
+  padding-left: 21px;
+  background: rgba(189,189,189,0.74);
+  height: 300px;
+  width: 4000px;
+  position: relative;
+  float: left;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+#workspace .track-space .track p {
+  position: absolute;
+  top: 40%;
+  font-size: 25px;
+  color: #72ddb3;
+  width: 100%;
+  text-align: center;
+  text-shadow: 1px 1px 1px #8a8a8a;
+}
+#workspace .track-space .track .play-cursor {
+  width: 1px;
+  border-left: 1px solid #ffa239;
+  height: 100%;
+  position: absolute;
+  left: 21px;
+}
+#workspace .track-space .track .paste-cursor {
+  width: 1px;
+  border-left: 1px solid #2ce5f5;
+  height: 100%;
+  position: absolute;
+  left: 0px;
+  display: none;
+}
+#workspace .track-space .track .selection {
+  width: 0px;
+  left: 0px;
+  height: 100%;
+  background: rgba(89,100,92,0.45);
+  position: absolute;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  -webkit-filter: hue-rotate(90deg);
+  z-index: 3;
+}
+#workspace .track-space .track .wave-progress {
+  width: 0;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  overflow: hidden;
+}
+#workspace .track-space .track .wave {
+  width: 100%;
+  height: 100%;
+}
+.volume {
+  display: inline-block;
+  margin: 10px 5px;
+  width: 200px;
+  height: 14px;
+  background: rgba(88,88,88,0.3);
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.2);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.2);
+}
+.volume-bar {
+  height: 10px;
+  width: 75%;
+  margin: 2px;
+  display: block;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 1px 1px rgba(0,0,0,0.5);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 1px 1px rgba(0,0,0,0.5);
+  background: #8aa7f7;
+  background: -webkit-linear-gradient(left, #8aa7f7 0%, #77d3e7 34%, #43eab2 65%, #95ef83 100%);
+  background: -moz-linear-gradient(left, #8aa7f7 0%, #77d3e7 34%, #43eab2 65%, #95ef83 100%);
+  background: -o-linear-gradient(left, #8aa7f7 0%, #77d3e7 34%, #43eab2 65%, #95ef83 100%);
+  background: -ms-linear-gradient(left, #8aa7f7 0%, #77d3e7 34%, #43eab2 65%, #95ef83 100%);
+  background: linear-gradient(to right, #8aa7f7 0%, #77d3e7 34%, #43eab2 65%, #95ef83 100%);
+}

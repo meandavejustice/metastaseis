@@ -1,15 +1,27 @@
-var EE = require('events').EventEmitter;
+// This file is a pit of new york city slarm, edit at your own risk
+
+
+/*
+4) make sure loading and wave rendering code is DRY
+*/
+
 var raf = require('raf');
+var EE = require('events').EventEmitter;
+var drawBuffer = require('draw-wave');
+var encoder = require('encode-wav');
 var AudioSource = require('audiosource');
+
+var forceDownload = require('./force-download');
+var timelineManage = require('./timeline');
 var formatTime = require('./format-time');
-var drawBuffer = require('./draw-buffer');
 var colors = require('./colors');
+
 module.exports = Track;
 
 function Track(opts) {
   this.emitter = new EE();
-  this.containEl = opts.containEl;
-  this.trackEl = this.containEl.querySelector('.track');
+  this.controlEl = opts.controlEl;
+  this.trackEl = opts.trackEl;
   this.active = true;
   this.selecting = true;
   this.context = opts.context;
@@ -23,44 +35,44 @@ function Track(opts) {
 
   this.clipboard = {
     start: 0,
-    end: 0,
-    at: 0
+    end: 0
   };
 
-  this.currentTime = this.context.currentTime;
   this.playing = false;
 
   this.startOffset = 0;
   this.lastPlay = 0;
-  this.lastPause = 0;
-  this.pausedSum = 0;
-  this.actualCurrentTime = 0;
-  this.initialPlay = true;
-  this.initStartTime = 0;
 
   // indicators
-  this.fileIndicator = this.containEl.querySelector('.track p');
-  this.currentTimeEl = this.containEl.querySelector('.cur');
-  this.remainingEl = this.containEl.querySelector('.rem');
-  this.durationEl = this.containEl.querySelector('.dur');
+  this.fileIndicator = this.trackEl.querySelector('.track p');
+  this.currentTimeEl = this.controlEl.querySelector('.cur');
+  this.remainingEl = this.controlEl.querySelector('.rem');
+  this.durationEl = this.controlEl.querySelector('.dur');
+
+  // center file indicator
+  var trackSpaceWidth = document.querySelector('.track-space').offsetWidth;
+  this.fileIndicator.style.width = trackSpaceWidth + 'px';
 
   // controls
-  this.gainEl = this.containEl.querySelector('.volume input');
+  this.gainEl = this.controlEl.querySelector('.volume');
+  this.volumeBar = this.gainEl.querySelector('.volume-bar');
+
 
   // wave elements
-  this.wave = this.containEl.querySelector('.wave canvas');
-  this.progressWave = this.containEl.querySelector('.wave-progress');
-  this.cursor = this.containEl.querySelector('.play-cursor');
-  this.selection = this.containEl.querySelector('.selection');
-  this.selectable = [].slice.call(document.querySelectorAll('.selectable'));
+  this.wave = this.trackEl.querySelector('.wave canvas');
+  this.progressWave = this.trackEl.querySelector('.wave-progress');
+  this.cursor = this.trackEl.querySelector('.play-cursor');
+  this.selection = this.trackEl.querySelector('.selection');
+  this.selectable = [].slice.call(this.trackEl.querySelectorAll('.selectable'));
 
   colors.start(this.fileIndicator, 300);
 
-  this.gainEl.addEventListener('change', function(ev) {
-    this.gainNode.gain.value = parseFloat(ev.target.value);
+  this.gainEl.addEventListener('click', function(ev) {
+    this.volumeBar.style.width = ev.offsetX + 'px';
+    this.gainNode.gain.value = ev.offsetX / this.gainEl.offsetWidth;
   }.bind(this));
 
-  this.containEl.querySelector('.activate').addEventListener('click', function(ev) {
+  this.controlEl.querySelector('.activate').addEventListener('click', function(ev) {
     var el = ev.target;
 
     if (el.classList.contains('active')) {
@@ -74,73 +86,31 @@ function Track(opts) {
     }
   }.bind(this));
 
-  var self = this;
   this.selectable.forEach(function(wave) {
-    wave.addEventListener('click', function(ev) {
-      if (this.playing) return;
-      this.cursor.style.left = this.percentFromClick(ev)+"%";
-    }.bind(self));
-
-    wave.addEventListener('click', function(ev) {
-      if (this.playing) return;
-      this.cursor.style.left = this.percentFromClick(ev)+"%";
-    }.bind(this));
-
-    wave.addEventListener('mousedown', function(ev) {
-      if (this.playing) return;
-      if (!this.moving) {
-        var leftPercent = this.percentFromClick(ev) + '%';
-
-        if (this.selecting) {
-          this.selection.style.left = leftPercent;
-          this.selection.style.width = 0;
-          this.moving = true;
-        }
-
-        this.cursor.style.left = leftPercent;
-        this.clipboard.at = this.getOffsetFromPercent(leftPercent.replace('%', ''));
-      }
-    }.bind(this));
-
-    wave.addEventListener('mousemove', function(ev) {
-      if (!this.moving || !this.selecting) return;
-      var leftPercent = this.getPercentFromCursor();
-      var rightPercent = this.percentFromClick(ev);
-      var diff = rightPercent - leftPercent;
-
-      if (diff > 0) {
-        diff += '%';
-      } else {
-        this.cursor.style.left = rightPercent +'%';
-        diff = leftPercent - rightPercent;
-        if (diff > 0) {
-          diff +='%';
-        } else diff = 0;
-      }
-
-      this.selection.style.width = diff;
-    }.bind(this));
-
+    wave.addEventListener('click', this.initSelection.bind(this));
+    wave.addEventListener('mousedown', this.startSelection.bind(this));
+    wave.addEventListener('mousemove', this.updateSelection.bind(this));
   }, this);
-
-  // this.selection.addEventListener('mouseout', function(ev) {
-  //   var leftPercent = this.getPercentFromCursor();
-  //   var rightPercent = this.percentFromClick(ev);
-  //   this.clipboard.start = this.getOffsetFromPercent(leftPercent);
-  //   this.clipboard.end = this.getOffsetFromPercent(rightPercent);
-  //   this.moving = false;
-  // }.bind(this));
 
   this.selection.addEventListener('mouseup', function(ev) {
     if (!this.selecting) return;
-    var leftPercent = this.getPercentFromCursor();
-    var rightPercent = this.percentFromClick(ev);
-    this.clipboard.start = this.getOffsetFromPercent(leftPercent);
-    this.clipboard.end = this.clipboard.start + this.getOffsetFromPercent(rightPercent);
+    var leftPercent = parseFloat(this.selection.style.left.replace('px', ''));
+    var rightPercent = leftPercent + parseFloat(this.selection.style.width.replace('px', ''));
+    this.clipboard.start = this.getTimeFromPosition(leftPercent);
+    this.clipboard.end = this.getTimeFromPosition(rightPercent);
     this.moving = false;
   }.bind(this));
 
-  this.containEl.querySelector('.mute').addEventListener('click', function(ev) {
+  this.controlEl.querySelector('.export').addEventListener('click', function() {
+    encoder.encodeWAV([this.audiosource.buffer.getChannelData(0), this.audiosource.buffer.getChannelData(1)],
+            this.audiosource.buffer.sampleRate,
+            function(blob) {
+              if (blob) forceDownload(URL.createObjectURL(blob));
+            })
+
+  }.bind(this));
+
+  this.controlEl.querySelector('.mute').addEventListener('click', function(ev) {
     var el = ev.target;
 
     if (el.classList.contains('active')) {
@@ -155,7 +125,7 @@ function Track(opts) {
     }
   }.bind(this));
 
-  this.containEl.querySelector('.edit').addEventListener('click', function(ev) {
+  this.controlEl.querySelector('.edit').addEventListener('click', function(ev) {
     var el = ev.target;
     if (el.classList.contains('active')) {
       el.classList.remove('active');
@@ -168,7 +138,7 @@ function Track(opts) {
     }
   }.bind(this));
 
-  this.containEl.querySelector('.collapse').addEventListener('click', function(ev) {
+  this.controlEl.querySelector('.collapse').addEventListener('click', function(ev) {
     var el = ev.target;
     if (el.classList.contains('active')) {
       el.classList.remove('active');
@@ -200,72 +170,89 @@ function Track(opts) {
 
   this.emitter.on('tracks:stop', stopListen.bind(this));
 
-  this.containEl.querySelector('.remove').addEventListener('click', function(ev) {
+  this.controlEl.querySelector('.remove').addEventListener('click', function(ev) {
     this.stop();
-    ev.target.parentElement.parentNode.parentNode.remove();
+    this.controlEl.remove();
+    this.trackEl.remove();
     this.emitter.emit('tracks:remove', {id: this.id});
     this.emitter = null;
   }.bind(this));
 }
 
 Track.prototype = {
-  play: function() {
-    this.stop();
-    this.lastPlay = this.context.currentTime;
-    this.updateStartOffset();
-    this.playTrack(this.startOffset % this.audiosource.buffer.duration);
-  },
-  remove: function() {
+  updateSelection: function(ev) {
+    if (!this.moving || !this.selecting) return;
+    var leftPosition = this.getPositionFromCursor();
+    var rightPosition = this.positionFromClick(ev);
+    var diff = rightPosition - leftPosition;
 
+    if (diff <= 0) {
+      diff = leftPosition - rightPosition;
+      this.cursor.style.left = rightPosition + 'px';
+      this.selection.style.left = rightPosition + 'px';
+    }
+
+    this.selection.style.width = diff +'px';
   },
-  percentFromClick: function(ev) {
-    var x = ev.offsetX || ev.layerX;
-    return (x / this.wave.offsetWidth) * 100;
-  },
-  getPercentFromCursor: function() {
-    return parseFloat(this.cursor.style.left.replace('%', ''));
-  },
-  getOffsetFromPercent: function(percent) {
-    if (percent === 0) return 0;
-    var inter = this.audiosource.buffer.duration / 100;
-    return inter * percent;
-  },
-  updateStartOffset: function() {
-    if (this.cursor.style.left !== '') {
-      var percent = this.getPercentFromCursor();
-      this.startOffset = this.getOffsetFromPercent(percent);
-    } else {
-      this.resetProgress();
+  startSelection: function(ev) {
+    if (this.playing) return;
+    if (!this.moving) {
+      var leftPosition = this.positionFromClick(ev);
+      if (this.selecting) {
+        this.selection.style.left = leftPosition + 'px';
+        this.selection.style.width = 0;
+        this.moving = true;
+      }
+
+      this.cursor.style.left = leftPosition + 'px';
     }
   },
-  updatePaused: function() {
-    this.pausedSum = this.pausedSum + (this.lastPlay - this.lastPause);
+  initSelection: function(ev) {
+    if (this.playing) return;
+    this.cursor.style.left = this.positionFromClick(ev)+"px";
+  },
+  play: function() {
+    this.lastPlay = this.context.currentTime;
+    this.playTrack(this.startOffset % this.audiosource.buffer.duration);
+    this.setCursorViewInterval();
+  },
+  setCursorViewInterval: function() {
+    if (this.cursorViewInterval) {
+      clearInterval(this.cursorViewInterval);
+    }
+    var self = this;
+    this.cursorViewInterval = setInterval(function() {
+                                self.cursor.scrollIntoViewIfNeeded();
+                              }, 200);
+  },
+  positionFromClick: function(ev) {
+    var x = ev.offsetX || ev.layerX;
+    return x + 21;
+  },
+  getPositionFromCursor: function() {
+    return parseFloat(this.cursor.style.left.replace('px', ''));
+  },
+  getTimeFromPosition: function(position) {
+    return (position / 100) * 5;
   },
   stop: function() {
     this.playing = false;
-    this.initialPlay = true;
     this.startOffset = 0;
     this.lastPlay = 0;
-    this.lastPause = 0;
-    this.pausedSum = 0;
+    clearInterval(this.cursorViewInterval);
     if (this.audiosource.source) this.audiosource.stop();
   },
   resetProgress: function() {
-    this.progressWave.style.width = "0%";
-    this.cursor.style.left = "0%";
+    this.progressWave.style.width = "0px";
+    this.cursor.style.left = "0px";
   },
   pause: function() {
-    this.lastPause = this.context.currentTime;
     this.audiosource.stop();
     this.startOffset += this.context.currentTime - this.lastPlay;
     this.playing = false;
   },
   skipForward: function() {},
   skipBackward: function() {},
-  updateProgress: function(percent) {
-    this.progressWave.style.width = percent+"%";
-    this.cursor.style.left = percent+"%";
-  },
   playTrack: function(offset, stopOffset) {
     if (this.playing) this.audiosource.stop();
     this.audiosource.play(0, offset);
@@ -273,25 +260,27 @@ Track.prototype = {
     this.playing = true;
     raf(this.triggerPlaying.bind(this));
   },
-  updateVisualProgress: function (percent) {
-    this.progressWave.style.width = percent+"%";
-    this.cursor.style.left = percent+"%";
+  updateVisualProgress: function (pos) {
+    this.progressWave.style.width = pos+"px";
+    this.cursor.style.left = (21+pos)+"px"; // 21 is the padding-left from beginning of track element
   },
   triggerPlaying: function() {
-    if (!this.playing) {
-      return;
-    }
+    if (!this.playing) return;
 
     var dur = this.audiosource.buffer.duration;
-    var x = this.currentTimeToPercent(this.context.currentTime);
+    var currentTime = this.context.currentTime - this.lastPlay + this.startOffset;
+    var remainingTime = dur - currentTime;
 
-    this.updateVisualProgress(x);
+    // this is the same way we are caculating the width of the waves
+    // to match up to the timeline
+    this.updateVisualProgress(((currentTime) / 5) * 100);
 
-    this.currentTimeEl.textContent = formatTime(this.context.currentTime - this.lastPlay);
-    this.remainingEl.textContent = formatTime((this.audiosource.buffer.duration - this.lastPlay) - (this.context.currentTime - this.lastPlay));
+    this.currentTimeEl.textContent = formatTime(currentTime, true);
+    this.remainingEl.textContent = formatTime(remainingTime, true);
 
-    if (parseInt(x) >= 100) {
+    if (remainingTime <= 0) {
       this.playing = !this.playing;
+      clearInterval(this.cursorViewInterval);
       return;
     }
     raf(this.triggerPlaying.bind(this));
@@ -322,25 +311,26 @@ Track.prototype = {
         req.responseType = 'arraybuffer';
     var self = this;
     req.onloadend = function(ev) {
-           self.fileIndicator.textContent = 'decoding audio data...';
+      self.fileIndicator.textContent = 'decoding audio data...';
 
-           self.context.decodeAudioData(req.response, function(buf) {
-           self.fileIndicator.textContent = 'rendering wave...';
+      self.context.decodeAudioData(req.response, function(buf) {
+        self.fileIndicator.textContent = 'rendering wave...';
 
-           self.gainNode = self.context.createGain();
-           self.audiosource = new AudioSource(self.context, {
-             gainNode: self.gainNode
-           });
+        self.gainNode = self.context.createGain();
+        self.audiosource = new AudioSource(self.context, {
+          gainNode: self.gainNode
+        });
 
-           self.durationEl.textContent = formatTime(buf.duration);
+        self.durationEl.textContent = formatTime(buf.duration, true);
+        self.remainingEl.textContent = formatTime(buf.duration, true);
 
-           self.audiosource.buffer = buf;
+        self.audiosource.buffer = buf;
 
-           self.adjustWave();
-           drawBuffer(self.wave, buf, '#52F6A4');
-           drawBuffer(self.progressWave.querySelector('canvas'), buf, '#F445F0');
-           self.fileIndicator.remove();
-         });
+        self.adjustWave();
+        drawBuffer(self.wave, buf, '#52F6A4');
+        drawBuffer(self.progressWave.querySelector('canvas'), buf, '#F445F0');
+        self.fileIndicator.remove();
+      });
     };
 
     req.send();
@@ -349,7 +339,6 @@ Track.prototype = {
     this.fileIndicator.textContent = 'loading file...';
 
     var self = this;
-    // set status and id3
     var reader = new FileReader();
     reader.onloadend = function(ev) {
       self.fileIndicator.textContent = 'decoding audio data...';
@@ -362,7 +351,8 @@ Track.prototype = {
           gainNode: self.gainNode
         });
 
-        self.durationEl.textContent = formatTime(buf.duration);
+        self.durationEl.textContent = formatTime(buf.duration, true);
+        self.remainingEl.textContent = formatTime(buf.duration, true);
 
         self.audiosource.buffer = buf;
 
@@ -376,19 +366,22 @@ Track.prototype = {
     reader.readAsArrayBuffer(file);
   },
   adjustWave: function() {
-    var w = this.wave.parentNode.offsetWidth;
+    timelineManage.update(this.audiosource.buffer.duration);
+    // adjust the canvas and containers to fit with the buffer duration
+    var w = (this.audiosource.buffer.duration / 5) * 100;
     this.wave.width = w;
     this.progressWave.querySelector('canvas').width = w;
   },
   drawWaves: function() {
+    timelineManage.update(this.audiosource.buffer.duration);
     var prevLeft = 0;
     if (this.cursor.style.left) {
-      prevLeft = parseFloat(this.cursor.style.left.replace('%', ''));
+      prevLeft = parseFloat(this.cursor.style.left.replace('px', ''));
     }
     this.resetVisual();
     drawBuffer(this.wave, this.audiosource.buffer, '#52F6A4');
     drawBuffer(this.progressWave.querySelector('canvas'), this.audiosource.buffer, '#F445F0');
+    colors.end();
     console.log('waves updated.')
-    // this.updateProgress(prevLeft);
   }
 }

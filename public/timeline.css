@@ -1,0 +1,33 @@
+.overhead {
+  zoom: 1;
+  padding-bottom: 20px;
+}
+.overhead:before,
+.overhead:after {
+  content: "";
+  display: table;
+}
+.overhead:after {
+  clear: both;
+}
+.overhead .time-setting {
+  *zoom: 1;
+  float: left;
+  clear: none;
+  text-align: inherit;
+  width: 14.166666666666702%;
+  margin-left: 0%;
+  margin-right: 3%;
+  padding-bottom: 20px;
+}
+.overhead .time-setting:before,
+.overhead .time-setting:after {
+  content: '';
+  display: table;
+}
+.overhead .time-setting:after {
+  clear: both;
+}
+.overhead .time-setting:last-child {
+  margin-right: 0%;
+}
