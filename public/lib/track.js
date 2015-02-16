@@ -1,10 +1,8 @@
 // This file is a pit of new york city slarm, edit at your own risk
 
-
 /*
 4) make sure loading and wave rendering code is DRY
 */
-
 var raf = require('raf');
 var EE = require('events').EventEmitter;
 var drawBuffer = require('draw-wave');
@@ -308,7 +306,7 @@ Track.prototype = {
 
     var req = new XMLHttpRequest();
     req.open('GET', url, true);
-        req.responseType = 'arraybuffer';
+    req.responseType = 'arraybuffer';
     var self = this;
     req.onloadend = function(ev) {
       self.fileIndicator.textContent = 'decoding audio data...';
@@ -365,15 +363,19 @@ Track.prototype = {
 
     reader.readAsArrayBuffer(file);
   },
-  adjustWave: function() {
+  updateTimeline: function() {
     timelineManage.update(this.audiosource.buffer.duration);
+  },
+  adjustWave: function() {
+    this.updateTimeline();
     // adjust the canvas and containers to fit with the buffer duration
     var w = (this.audiosource.buffer.duration / 5) * 100;
+    this.trackEl.style.width = w +50+'px';
     this.wave.width = w;
     this.progressWave.querySelector('canvas').width = w;
   },
   drawWaves: function() {
-    timelineManage.update(this.audiosource.buffer.duration);
+    this.updateTimeline();
     var prevLeft = 0;
     if (this.cursor.style.left) {
       prevLeft = parseFloat(this.cursor.style.left.replace('px', ''));

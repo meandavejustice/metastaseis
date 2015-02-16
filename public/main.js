@@ -40,7 +40,6 @@ var prependBtn = document.querySelector('#prepend');
 var appendBtn = document.querySelector('#append');
 var duplicateBtn = document.querySelector('#duplicate');
 var reverseBtn = document.querySelector('#reverse');
-var removeBtn = document.querySelector('#remove');
 var recordBtn = document.querySelector('#record');
 var tracks = {};
 
@@ -113,6 +112,7 @@ importBtn.addEventListener('click', function() {
 
 importInput.addEventListener('change', function(ev) {
   newTrackFromFile(ev.target.files[0]);
+  document.querySelector('#import').value = '';
 });
 
 playBtn.addEventListener('click', function() {
@@ -314,10 +314,31 @@ function newTrackFromAudioBuffer(audioBuffer) {
     tracks[ev.id] = null;
     delete tracks[ev.id];
     this.removeAllListeners();
+    drawTimelineByLongestTrack();
     showWelcome();
   });
 
   enablePlaybackOpts();
+}
+
+function drawTimelineByLongestTrack() {
+  if (!Object.keys(tracks).length) return;
+
+  var prevBuf = {
+    key: '',
+    dur: 0
+  };
+  Object.keys(tracks).forEach(function(key) {
+    var dur = tracks[key].audiosource.buffer.duration;
+    if (dur > prevBuf.dur) {
+      prevBuf = {
+        key: key,
+        dur: dur
+      }
+    }
+  });
+
+  tracks[prevBuf.key].updateTimeline();
 }
 
 function newTrackFromFile(file) {
@@ -348,6 +369,7 @@ function newTrackFromFile(file) {
     tracks[ev.id] = null;
     delete tracks[ev.id];
     this.removeAllListeners();
+    drawTimelineByLongestTrack();
     showWelcome();
   });
   tracks[id].loadFile(file);
@@ -375,6 +397,7 @@ function newTrackFromURL(url) {
     tracks[ev.id] = null;
     delete tracks[ev.id];
     this.removeAllListeners();
+    drawTimelineByLongestTrack();
     showWelcome();
   });
   tracks[id].loadURL(url);

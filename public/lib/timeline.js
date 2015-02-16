@@ -29,16 +29,22 @@ function getPoints(cur, max) {
   }
 }
 
-function update(duration) {
+function update(duration, clean) {
   console.log('duration::', duration);
   var nuPointLength = calculatePoints(duration);
-  if (nuPointLength < getPointLength()) return;
 
-  var w = timelineEl.offsetWidth;
-  timelineEl.innerHTML = '';
-  getPoints(-5, duration);
-  if (timelineEl.children.length * 100 > w) {
+  if (clean) {
+    timelineEl.innerHTML = '';
+    getPoints(-5, duration);
     timelineEl.style.width = timelineEl.children.length * 100 + 'px';
+  } else {
+    if (nuPointLength < getPointLength()) return;
+    var w = timelineEl.offsetWidth;
+    timelineEl.innerHTML = '';
+    getPoints(-5, duration);
+    if (timelineEl.children.length * 100 > w) {
+      timelineEl.style.width = timelineEl.children.length * 100 + 'px';
+    }
   }
 }
 
